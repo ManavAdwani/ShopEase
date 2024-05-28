@@ -33,3 +33,5 @@ Route::post('update_password/{id}',[AdminController::class,'update_pass'])->name
 Route::get('delete-user/{id}',[AdminController::class,'delete_user'])->name('admin.delete_user');
 
 Route::get('products',[ProductController::class,'index'])->name('admin.products');
+Route::get('create-product',[ProductController::class,'create'])->name('admin.create_product');
+Route::post('store-product',[ProductController::class,'store'])->name('admin.product_store');

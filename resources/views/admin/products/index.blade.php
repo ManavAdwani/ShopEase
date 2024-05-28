@@ -29,7 +29,7 @@
                             <!-- <i class="fa fa-user fa-5x" aria-hidden="true"></i> -->
                         </div>
                         <div class="text-value-lg" style="font-size: 20px;">
-                            {{$totalUsers ?? 0}}
+                            {{$TotalProducts ?? 0}}
                         </div>
                         <h5>Total Products</h5>
                     </div>
@@ -60,7 +60,7 @@
                 <h3>Products</h3>
             </div>
             <div class="addUser">
-                <a href="{{route('admin.create')}}" class="btn btn-sm btn-primary">Add Product</a>
+                <a href="{{route('admin.create_product')}}" class="btn btn-sm btn-primary">Add Product</a>
             </div>
         </div>
         <br><br>
