@@ -35,3 +35,4 @@ Route::get('delete-user/{id}',[AdminController::class,'delete_user'])->name('adm
 Route::get('products',[ProductController::class,'index'])->name('admin.products');
 Route::get('create-product',[ProductController::class,'create'])->name('admin.create_product');
 Route::post('store-product',[ProductController::class,'store'])->name('admin.product_store');
+Route::get('delete-product/{id}',[ProductController::class,'delete'])->name('admin.delete_product');

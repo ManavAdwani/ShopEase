@@ -53,22 +53,36 @@
             <!-- Text input -->
             <div data-mdb-input-init class="form-outline mb-4">
                 <label class="form-label" for="form6Example3">Company name</label>
-                <select class="form-select" name="company_id" aria-label="Default select example">
-                    <option selected>Select company name</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select>
+                <div class="cmp" style="display: flex">
+                    <select class="form-select" name="company_id" aria-label="Default select example">
+                        <option selected>Select company name</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                    <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#addCmp">
+                        <span class="material-symbols-outlined">
+                            add_circle
+                            </span>
+                      </button>
+                </div>
             </div>
 
             <div data-mdb-input-init class="form-outline mb-4">
                 <label class="form-label" for="form6Example3">Category name</label>
+                <div class="cat" style="display: flex">
                 <select class="form-select" name="category_id" aria-label="Default select example">
                     <option selected>Select category name</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
                 </select>
+                <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#addCat">
+                    <span class="material-symbols-outlined">
+                        add_circle
+                        </span>
+                  </button>
+                </div>
             </div>
 
             <!-- Text input -->
@@ -87,6 +101,7 @@
     </div>
 
 
+    {{-- MODAL --}}
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

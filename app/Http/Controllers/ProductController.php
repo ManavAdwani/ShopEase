@@ -43,9 +43,22 @@ class ProductController extends Controller
         if ($product_images) {
             foreach ($product_images as $image) {
                 $image_cnt++;
-                // Save the file to a storage path (e.g., public/uploads/products)
-                $path = $image->store('uploads/products', 'public');
-                $imagePaths[] = $path;
+                // Define the path where you want to save the file
+                $destinationPath = public_path('uploads/products');
+            
+                // Ensure the directory exists
+                if (!file_exists($destinationPath)) {
+                    mkdir($destinationPath, 0755, true);
+                }
+            
+                // Save the file
+                $filename = $image->getClientOriginalName(); // Or generate a unique name
+                $image->move($destinationPath, $filename);
+            
+                // Create the relative path to store in the database or use later
+                $relativePath = 'uploads/products/' . $filename;
+                $imagePaths[] = $relativePath;
+                // dd($imagePaths);
             }
         }
 
@@ -61,5 +74,15 @@ class ProductController extends Controller
         $product->save();
         return redirect()->route('admin.products')->with('success','Product addedd successfully !');
 
+    }
+
+    public function delete($id){
+        $product_det = Product::findOrFail($id);
+        if($product_det){
+            $product_det->delete();
+            return redirect()->route('admin.products')->with('success','Product deleted successfully !');
+        }else{
+            return back()->with('error','Something went wrong !');
+        }
     }
 }

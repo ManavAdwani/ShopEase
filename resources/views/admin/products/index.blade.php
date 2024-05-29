@@ -81,39 +81,52 @@
             {{ session('success') }}
         </div>
         @endif
-        <div class="container" style="display: flex; flex-wrap:wrap; justify-content:space-between">
+        <div class="container" style="display: flex; flex-wrap:wrap; justify-content:left; gap:20px;">
+            @foreach ($products as $item)
             <div class="card mt-4" style="width: 18rem;">
-                <img src="https://images.samsung.com/is/image/samsung/assets/in/explore/brand/5-best-android-mobile-phones-2022-in-india/banner-desktop-684x723-080422.jpg?$684_N_JPG$" class="card-img-top" alt="...">
+                @if ($item->images)
+                @php
+                    // Split the comma-separated string into an array
+                    $imagesArray = explode(',', $item->images);
+                    // Get the first image path
+                    $firstImage = $imagesArray;
+                    // echo "<h3>{{$firstImage}}</h3>";
+                    $cnt = 1;
+                @endphp
+                @foreach ($imagesArray as $img)
+                @if ($cnt == 1)
+                {{-- {{$img}} --}}
+                <img src="{{ $img }}" alt="" style="width:auto;height:300px">
+                @endif
+               <p style="display: none">{{$cnt++}}</p> 
+                @endforeach
+            @else
+                <img src="https://cdn-cemal.nitrocdn.com/iwTMUnSsYeigzDpMWgwdBZhpcIeWwszq/assets/images/optimized/rev-725ed2c/www.aaronfaber.com/wp-content/uploads/2017/03/product-placeholder-wp-95907_800x675.jpg" alt="" style="width:auto;height:300px">
+            @endif
+            
                 <div class="card-body">
-                  <h5 class="card-title">Product Title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                  <h5 class="card-title">{{$item->product_name}}</h5>
+                  <p class="card-text"><b>Company - {{$item->company_id}}</b></p>
+                  <p class="card-text" style="font-size:20px;"><b>{{$item->product_price}}/-</b></p>
+                  <div class="btns" style="display: flex; justify-content:space-between">
+                    <div class="editBtn">
+                        <a href="#" class="btn btn-primary" style="display: flex; align-item:center;gap:10px">
+                            <span class="material-symbols-outlined" style="font-size: 18px;display:inline-flex;align-items:center;">
+                                edit
+                            </span> Edit
+                        </a>
+                    </div>
+                    <div class="dltBtn">
+                        <a href="{{route('admin.delete_product',$item->id)}}" class="btn btn-danger" style="display: flex; align-item:center;gap:10px">
+                            <span class="material-symbols-outlined" style="font-size: 18px;display:inline-flex;align-items:center;">
+                                Delete
+                            </span> Delete
+                        </a>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="card mt-4" style="width: 18rem;">
-                <img src="https://images.samsung.com/is/image/samsung/assets/in/explore/brand/5-best-android-mobile-phones-2022-in-india/banner-desktop-684x723-080422.jpg?$684_N_JPG$" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">Product Title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-              </div>
-              <div class="card mt-4" style="width: 18rem;">
-                <img src="https://images.samsung.com/is/image/samsung/assets/in/explore/brand/5-best-android-mobile-phones-2022-in-india/banner-desktop-684x723-080422.jpg?$684_N_JPG$" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">Product Title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-              </div>
-              <div class="card mt-4" style="width: 18rem;">
-                <img src="https://images.samsung.com/is/image/samsung/assets/in/explore/brand/5-best-android-mobile-phones-2022-in-india/banner-desktop-684x723-080422.jpg?$684_N_JPG$" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">Product Title</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-              </div>
+            @endforeach
         </div>
     </div>
 
