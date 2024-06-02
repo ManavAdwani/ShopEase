@@ -205,15 +205,17 @@
             <div> <a href="#" class="nav_logo"> <i class='bx bx-layer nav_logo-icon'></i> <span
                         class="nav_logo-name">Sainath Mobiles</span> </a>
                 <div class="nav_list">
-                    <a href="{{route('admin.dashboard')}}" class="nav_link {{ $activePage == 'dashboard' ? 'active' : '' }}"> <i
+                    <a title="Home" href="{{route('admin.dashboard')}}" class="nav_link {{ $activePage == 'dashboard' ? 'active' : '' }}"> <i
                             class='bx bx-grid-alt nav_icon'></i>
                         <span class="nav_name">Dashboard</span> </a>
-                    <a href="{{route('admin.users')}}" class="nav_link {{ $activePage == 'users' ? 'active' : '' }}"> <i class='bx bx-user nav_icon'></i> <span
+                    <a title="Users" href="{{route('admin.users')}}" class="nav_link {{ $activePage == 'users' ? 'active' : '' }}"> <i class='bx bx-user nav_icon'></i> <span
                             class="nav_name">Users</span> </a>
-                    <a href="{{route('admin.products')}}" class="nav_link {{ $activePage == 'products' ? 'active' : '' }}"> <i class='bx bx-cart nav_icon'></i> <span
+                    <a title="Products" href="{{route('admin.products')}}" class="nav_link {{ $activePage == 'products' ? 'active' : '' }}"> <i class='bx bx-mobile-alt nav_icon'></i> <span
                             class="nav_name">Products</span> </a>
+                            <a title="Orders" href="{{route('admin.products')}}" class="nav_link {{ $activePage == 'orders' ? 'active' : '' }}"> <i class='bx bx-cart nav_icon'></i> <span
+                                class="nav_name">Orders</span> </a>
                 </div>
-            </div> <a href="#" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span
+            </div> <a title="Sign out" href="#" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span
                     class="nav_name">SignOut</span> </a>
         </nav>
     </div>
