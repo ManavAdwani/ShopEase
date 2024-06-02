@@ -43,3 +43,7 @@ Route::post('create-company',[ProductController::class,'create_company'])->name(
 Route::post('create-category',[ProductController::class,'create_category'])->name('admin.create_category');
 Route::get('delete-images/{id}/{image}',[ProductController::class,'delete_images'])->name('admin.delete_images');
 Route::post('update-product/{id}',[ProductController::class,'update_product'])->name('admin.update_product');
+
+#Users Route
+// Route::get('users-nav',[UserController::class,'navbar'])->name('users.navbar');
+Route::get('homepage',[UserController::class,'user_homepage'])->name('users.homepage');

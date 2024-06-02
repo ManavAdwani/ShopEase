@@ -36,4 +36,8 @@ class UserController extends Controller
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
     }
+
+    public function user_homepage(){
+        return view('users.homepage');
+    }
 }
