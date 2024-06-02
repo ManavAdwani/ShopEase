@@ -45,7 +45,7 @@
                             <!-- <i class="fa fa-user fa-5x" aria-hidden="true"></i> -->
                         </div>
                         <div class="text-value-lg" style="font-size: 20px;">
-                            {{$activeUsers ?? 0}}
+                            {{$TotalCompanies ?? 0}}
                         </div>
                         <h5>Total Companies</h5>
                     </div>
@@ -106,11 +106,15 @@
             
                 <div class="card-body">
                   <h5 class="card-title">{{$item->product_name}}</h5>
-                  <p class="card-text"><b>Company - {{$item->company_id}}</b></p>
+                  @php
+                      $companydeets = DB::table('companies')->where('id','=',$item->company_id)->select('company_name')->first();
+                      $company_name = $companydeets->company_name ?? 'N/A';
+                  @endphp
+                  <p class="card-text"><b>Company - {{$company_name}}</b></p>
                   <p class="card-text" style="font-size:20px;"><b>{{$item->product_price}}/-</b></p>
                   <div class="btns" style="display: flex; justify-content:space-between">
                     <div class="editBtn">
-                        <a href="#" class="btn btn-primary" style="display: flex; align-item:center;gap:10px">
+                        <a href="{{route('admin.edit_product',$item->id)}}" class="btn btn-primary" style="display: flex; align-item:center;gap:10px">
                             <span class="material-symbols-outlined" style="font-size: 18px;display:inline-flex;align-items:center;">
                                 edit
                             </span> Edit

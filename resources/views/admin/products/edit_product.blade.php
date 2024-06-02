@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sainath mobiles - Create Product</title>
+    <title>Sainath mobiles - Edit Product</title>
     <link rel="stylesheet" href="{{asset('css/create_products.css')}}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
@@ -14,7 +14,14 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css">
     <style>
-
+        .image-previews-items{
+            position: relative;
+        }
+        .deletebtn{
+            position: absolute;
+            top:20;
+            right: 20;
+        }
     </style>
 </head>
 
@@ -23,7 +30,7 @@
 <body>
 
     <div class="container">
-        <h3>Create Product</h3>
+        <h3>Edit Product</h3>
         @if ($errors->any())
         <div>
             <ul>
@@ -33,19 +40,39 @@
             </ul>
         </div>
         @endif
-        <form action="{{route('admin.product_store')}}" class="mt-5" method="POST" enctype="multipart/form-data">
+        @if (session('success'))
+        <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+        </div>
+        @endif
+        <form action="{{route('admin.update_product',$product_id)}}" class="mt-5" method="POST" enctype="multipart/form-data">
             @csrf
             <!-- 2 column grid layout with text inputs for the first and last names -->
             <div class="mb-3">
                 <label for="formFileMultiple" class="form-label">Images</label>
                 <input class="form-control" name="product_images[]" type="file" id="formFileMultiple" multiple>
                 <div class="image-preview mt-2" id="imagePreview"></div>
+                <label for="">Uploaded Images</label>
+                <div class="image-previews-items">
+                    @php
+                        $allImages = explode(',', $images);
+                        foreach ($allImages as $value) {
+    $encryptedValue = Crypt::encrypt($value);
+    echo '<img src="' . asset($value) . '" alt="" height=200 width=200>';
+    echo '<a href="'. route('admin.delete_images', ['id' => $product_id, 'image' => $encryptedValue]) .'" class="btn btn-link" data-image="'. $value .'">
+        <span class="material-symbols-outlined" style="color:red">
+delete
+</span>    
+    </a>';
+}                     
+                    @endphp
+                </div>                
             </div>
             <div class="row mb-4">
                 <div class="col">
                     <div data-mdb-input-init class="form-outline">
                         <label class="form-label" for="form6Example1">Product name</label>
-                        <input type="text" name="product_name" placeholder="Product name" id="form6Example1"
+                        <input type="text" name="product_name" value="{{$name}}" placeholder="Product name" id="form6Example1"
                             class="form-control" />
                     </div>
                 </div>
@@ -59,7 +86,9 @@
                         id="addCompanySelect">
                         <option selected>Select company name</option>
                         @foreach ($companies as $company)
-                        <option value="{{$company->id}}">{{$company->company_name}}</option>
+                        <option value="{{$company->id}}" @if ($selectedcompany == $company->id)
+                            selected
+                        @endif>{{$company->company_name}}</option>
                         @endforeach
                     </select>
                     <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#addCmp">
@@ -76,7 +105,9 @@
                     <select class="form-select" name="category_id" aria-label="Default select example" id="addCategorySelect">
                         <option selected>Select category name</option>
                         @foreach ($categories as $category)
-                        <option value="{{$category->id}}">{{$category->category_name}}</option>
+                        <option value="{{$category->id}}" @if ($selectedcategory == $category->id)
+                            selected
+                        @endif>{{$category->category_name}}</option>
                         @endforeach
                     </select>
                     <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#addCat">
@@ -90,14 +121,12 @@
             <!-- Text input -->
             <div data-mdb-input-init class="form-outline mb-4">
                 <label class="form-label" for="form6Example4">Product price</label>
-                <input type="text" name="product_price" id="form6Example4" placeholder="product_price"
+                <input type="text" name="product_price" value="{{$price}}" id="form6Example4" placeholder="product_price"
                     class="form-control" />
             </div>
 
             <!-- Submit button -->
-            <button data-mdb-ripple-init type="submit" class="btn btn-primary btn-block mb-4">Create</button>
-            <button data-mdb-ripple-init type="button" class="btn btn-warning btn-block mb-4">Submit and create
-                another</button>
+            <button data-mdb-ripple-init type="submit" class="btn btn-primary btn-block mb-4">Edit</button>
             <button data-mdb-ripple-init type="button" class="btn btn-danger btn-block mb-4">Cancel</button>
         </form>
     </div>

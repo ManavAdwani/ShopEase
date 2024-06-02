@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
+use App\Models\Product;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,3 +38,8 @@ Route::get('products',[ProductController::class,'index'])->name('admin.products'
 Route::get('create-product',[ProductController::class,'create'])->name('admin.create_product');
 Route::post('store-product',[ProductController::class,'store'])->name('admin.product_store');
 Route::get('delete-product/{id}',[ProductController::class,'delete'])->name('admin.delete_product');
+ROute::get('edit-product/{id}',[ProductController::class,'edit'])->name('admin.edit_product');
+Route::post('create-company',[ProductController::class,'create_company'])->name('admin.create_company');
+Route::post('create-category',[ProductController::class,'create_category'])->name('admin.create_category');
+Route::get('delete-images/{id}/{image}',[ProductController::class,'delete_images'])->name('admin.delete_images');
+Route::post('update-product/{id}',[ProductController::class,'update_product'])->name('admin.update_product');

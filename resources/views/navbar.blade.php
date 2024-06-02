@@ -134,7 +134,7 @@
             font-size: 1.25rem
         }
 
-        .show {
+        .shows {
             left: 0
         }
 
@@ -184,7 +184,7 @@
                 padding: 1rem 1rem 0 0
             }
 
-            .show {
+            .shows {
                 width: calc(var(--nav-width) + 156px)
             }
 
@@ -236,7 +236,7 @@
             if (toggle && nav && bodypd && headerpd) {
                 toggle.addEventListener('click', () => {
                     // show navbar
-                    nav.classList.toggle('show')
+                    nav.classList.toggle('shows')
                     // change icon
                     toggle.classList.toggle('bx-x')
                     // add padding to body
