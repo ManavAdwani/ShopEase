@@ -27,7 +27,7 @@ class UserController extends Controller
                 return redirect('/admin-dashboard')->with('user', $user);
                 // return view('admin.dashboard', ['user' => $user]);
             } else {
-                return view('users.homepage',['user'=>$user]);
+                return redirect('/homepage')->with('user',$user);
             }
 
             return response()->json(['message' => 'Login successful', 'user' => $user]);

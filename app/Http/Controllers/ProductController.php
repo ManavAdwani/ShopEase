@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Company;
+use App\Models\Favourite;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Crypt;
@@ -216,6 +217,71 @@ class ProductController extends Controller
             return redirect()->route('admin.products')->with('success', 'Product Updated successfully !');
         } else {
             return redirect()->route('admin.products')->with('error', 'Something went wrong !');
+        }
+    }
+
+    // USER SIDE
+    public function user_products(Request $request)
+    {
+        $selectedcat = $request->get('category') ?? 0;
+        $selectedcom = $request->get('company') ?? 0;
+        $searched = $request->get('search') ?? '';
+
+        // Fetch all categories and companies
+        $categories = Category::all();
+        $companies = Company::all();
+
+        // Initialize the query builder for products
+        $query = Product::query();
+
+        // Apply category filter if present
+        if ($request->get('category')) {
+            $query->where('category_id', $request->get('category'));
+        }
+
+        if($request->get('company')){
+            $query->where('company_id',$request->get('company'));
+        }
+
+        if ($request->get('search')) {
+            $query->where('product_name', 'LIKE', '%' . $request->get('search') . '%');
+        }
+        
+        // Paginate the results
+        $products = $query->paginate(20);
+
+        // Return the view with the fetched data
+        return view('users.products.index', compact('searched','categories', 'companies','selectedcom', 'products','selectedcat'));
+    }
+
+    public function fav_product(Request $request)
+    {
+        $user_id = $request->user_id ?? 0;
+        $product_id = $request->product_id ?? 0;
+
+        $getFav = Favourite::where('product_id', $product_id)->select()->first();
+        if (!empty($getFav->id)) {
+            $DBuserId = $getFav->user_id;
+            if ($user_id == $DBuserId) {
+                return response()->json(['status' => 'error', 'message' => 'Already added in favourite list']);
+            } else {
+                $userIds = explode(",", $DBuserId);
+                $newUserId = $user_id;
+                $userIds[] = $newUserId;
+                $newIdsString = implode(",", $userIds);
+                $getFav->user_id = $newIdsString;
+                $getFav->update();
+                return response()->json(['status' => 'success', 'message' => 'Product added successfully in your favorite list !']);
+            }
+        } else {
+            $input = [
+                'user_id' => $user_id,
+                'product_id' => $product_id
+            ];
+            $fav_product = Favourite::create($input);
+            if ($fav_product) {
+                return response()->json(['status' => 'success', 'message' => 'Product added successfully in your favorite list !']);
+            }
         }
     }
 }

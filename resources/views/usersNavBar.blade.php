@@ -30,7 +30,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active d-flex align-items-center" aria-current="page" href="#">
+                        <a class="nav-link active d-flex align-items-center" aria-current="page" href="{{route('users.products')}}">
                             <span class="material-symbols-outlined me-2">
                                 phone_iphone
                             </span> 

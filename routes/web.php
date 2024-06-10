@@ -47,3 +47,5 @@ Route::post('update-product/{id}',[ProductController::class,'update_product'])->
 #Users Route
 // Route::get('users-nav',[UserController::class,'navbar'])->name('users.navbar');
 Route::get('homepage',[UserController::class,'user_homepage'])->name('users.homepage');
+Route::get('user-products',[ProductController::class,'user_products'])->name('users.products');
+Route::post('fav_product',[ProductController::class,'fav_product'])->name('users.fav_pro');
