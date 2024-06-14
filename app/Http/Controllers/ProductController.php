@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Company;
 use App\Models\Favourite;
@@ -281,6 +282,36 @@ class ProductController extends Controller
             $fav_product = Favourite::create($input);
             if ($fav_product) {
                 return response()->json(['status' => 'success', 'message' => 'Product added successfully in your favorite list !']);
+            }
+        }
+    }
+
+    public function add_to_cart(Request $request){
+        $user_id = $request->user_id ?? 0;
+        $product_id = $request->product_id ?? 0;
+        $product_quantity = $request->pro_quan ?? 0;
+
+        $product = Product::findOrFail($product_id);
+        $input = [
+            'user_id'=>$user_id,
+            'product_id'=>$product_id,
+            'quantity'=>$product_quantity
+        ];
+
+        $checkCart = Cart::where('product_id','=',$product_id)->where('user_id','=',$user_id)->select()->first();
+        if(!empty($checkCart->id)){
+            $cart = Cart::findOrFail($checkCart->id);
+            $oldQuantity = $cart->quantity;
+            $newQuant = $oldQuantity + $product_quantity;
+            $cart->quantity = $newQuant;
+            $cart->update();
+            return response()->json(['data'=>$product->product_name,'status' => 'success', 'message' => 'Product added successfully in your cart !']); 
+        }else{
+            $cart = Cart::create($input);
+            if(!empty($cart->id)){
+                return response()->json(['data'=>$product->product_name,'status' => 'success', 'message' => 'Product added successfully in your cart !']); 
+            }else{
+                return response()->json(['status' => 'error', 'message' => 'Something went wrong please try again later !']); 
             }
         }
     }
