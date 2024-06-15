@@ -295,10 +295,11 @@ class ProductController extends Controller
         $input = [
             'user_id'=>$user_id,
             'product_id'=>$product_id,
-            'quantity'=>$product_quantity
+            'quantity'=>$product_quantity,
+            'status'=>"pending"
         ];
 
-        $checkCart = Cart::where('product_id','=',$product_id)->where('user_id','=',$user_id)->select()->first();
+        $checkCart = Cart::where('product_id','=',$product_id)->where('user_id','=',$user_id)->where('status','pending')->select()->first();
         if(!empty($checkCart->id)){
             $cart = Cart::findOrFail($checkCart->id);
             $oldQuantity = $cart->quantity;

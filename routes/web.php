@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Models\Product;
 
@@ -50,3 +51,10 @@ Route::get('homepage',[UserController::class,'user_homepage'])->name('users.home
 Route::get('user-products',[ProductController::class,'user_products'])->name('users.products');
 Route::post('fav_product',[ProductController::class,'fav_product'])->name('users.fav_pro');
 Route::post('add_to_cart',[ProductController::class,'add_to_cart'])->name('users.add_to_cart');
+Route::get('cart',[CartController::class,'cart_index'])->name('users.cart');
+Route::post('update_cart',[CartController::class,'update_cart'])->name('users.update_cart');
+Route::get('user-address',[CartController::class,'user_address'])->name('users.address');
+Route::post('add-address',[CartController::class,'store_address'])->name('users.store_address');
+Route::get('/get-city-state', [CartController::class, 'getCityState']);
+Route::get('thank-you',[CartController::class,'thankyou'])->name('users.thankyou');
+Route::get('save-order-old-address/{id}',[CartController::class,'save_order_old'])->name('users.save_address_order');

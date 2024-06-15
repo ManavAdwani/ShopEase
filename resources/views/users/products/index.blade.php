@@ -91,18 +91,18 @@
                         <h5 class=" card-text mt-4"> ₹{{$product->product_price}}</h5>
                         <div class="allBtns" style="display: flex; flex-wrap:wrap">
                             <div>
-                                <a id="addToCart" onclick="addToCart({{$product->id}})" title="Add to cart" class="btn btn-sm btn-link" style="margin-top: 09px;">
+                                <a id="addToCart{{$product->id}}" onclick="addToCart({{$product->id}})" title="Add to cart" class="btn btn-sm btn-link" style="margin-top: 09px;">
                                     <span class="material-symbols-outlined">
                                         shopping_cart
                                     </span>
                                 </a>
-                                <input type="text" class="form-control" name="" placeholder="Enter Quantity" id="pro_quan" style="display: none;width:100%">
+                                <input type="text" class="form-control" name="" placeholder="Enter Quantity" id="pro_quan{{$product->id}}" style="display: none;width:100%">
                                 <div class="btns" style="display: flex;flex-wrap:wrap;justify-content:space-between">
                                     <div>
-                                        <button onclick="addToCartButton({{$product->id}})" style="display: none;width:100%" title="Add to cart" class="btn btn-sm btn-primary" id="addBtn"><i class='fas fa-plus' ></i></button>
+                                        <button onclick="addToCartButton({{$product->id}})" style="display: none;width:100%" title="Add to cart" class="btn btn-sm btn-primary" id="addBtn{{$product->id}}"><i class='fas fa-plus' ></i></button>
                                     </div>
                                     <div>
-                                        <button onclick="cancelCartButton({{$product->id}})" style="display: none;width:100%" title="Cancel" class="btn btn-sm btn-danger" id="cancelBtn"><i class='fas fa-times' ></i></button>
+                                        <button onclick="cancelCartButton({{$product->id}})" style="display: none;width:100%" title="Cancel" class="btn btn-sm btn-danger" id="cancelBtn{{$product->id}}"><i class='fas fa-times' ></i></button>
                                     </div>
                                 </div>
                             </div>

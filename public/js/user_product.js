@@ -49,10 +49,10 @@ function addFavoriteProduct(product_ids) {
 
 function addToCart(product_id) {
     var pid = product_id;
-    var atc = document.getElementById("addToCart");
-    var pro_quan = document.getElementById("pro_quan");
-    var addBtn = document.getElementById("addBtn");
-    var cancelBtn = document.getElementById("cancelBtn");
+    var atc = document.getElementById("addToCart"+pid);
+    var pro_quan = document.getElementById("pro_quan"+pid);
+    var addBtn = document.getElementById("addBtn"+pid);
+    var cancelBtn = document.getElementById("cancelBtn"+pid);
 
     atc.style.display = "none";
     pro_quan.style.display = "inline";
@@ -66,10 +66,10 @@ function addToCart(product_id) {
 
 function cancelCartButton(product_id) {
     var pid = product_id;
-    var atc = document.getElementById("addToCart");
-    var pro_quan = document.getElementById("pro_quan");
-    var addBtn = document.getElementById("addBtn");
-    var cancelBtn = document.getElementById("cancelBtn");
+    var atc = document.getElementById("addToCart"+pid);
+    var pro_quan = document.getElementById("pro_quan"+pid);
+    var addBtn = document.getElementById("addBtn"+pid);
+    var cancelBtn = document.getElementById("cancelBtn"+pid);
     // Add blur event listener to pro_quan
     cancelBtn.addEventListener("click", function () {
         pro_quan.style.display = "none";
@@ -81,7 +81,7 @@ function cancelCartButton(product_id) {
 
 function addToCartButton(product_id) {
     var pid = product_id;
-    var pro_quan = document.getElementById("pro_quan").value;
+    var pro_quan = document.getElementById("pro_quan"+pid).value;
     var user_id = document.getElementById('user_id').value;
 
     $.ajax({
