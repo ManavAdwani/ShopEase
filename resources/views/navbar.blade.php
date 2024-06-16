@@ -212,7 +212,7 @@
                             class="nav_name">Users</span> </a>
                     <a title="Products" href="{{route('admin.products')}}" class="nav_link {{ $activePage == 'products' ? 'active' : '' }}"> <i class='bx bx-mobile-alt nav_icon'></i> <span
                             class="nav_name">Products</span> </a>
-                            <a title="Orders" href="{{route('admin.products')}}" class="nav_link {{ $activePage == 'orders' ? 'active' : '' }}"> <i class='bx bx-cart nav_icon'></i> <span
+                            <a title="Orders" href="{{route('admin.orders')}}" class="nav_link {{ $activePage == 'orders' ? 'active' : '' }}"> <i class='bx bx-cart nav_icon'></i> <span
                                 class="nav_name">Orders</span> </a>
                 </div>
             </div> <a title="Sign out" href="#" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span

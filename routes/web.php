@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductController;
 use App\Models\Product;
 
@@ -44,6 +45,11 @@ Route::post('create-company',[ProductController::class,'create_company'])->name(
 Route::post('create-category',[ProductController::class,'create_category'])->name('admin.create_category');
 Route::get('delete-images/{id}/{image}',[ProductController::class,'delete_images'])->name('admin.delete_images');
 Route::post('update-product/{id}',[ProductController::class,'update_product'])->name('admin.update_product');
+Route::get('orders',[OrdersController::class,'orders'])->name('admin.orders');
+Route::get('edit-order/{id}',[OrdersController::class,'edit_order'])->name('admin.edit_order');
+Route::post('update-cart-admin',[OrdersController::class,'update_cart_admin'])->name('admin.update_cart');
+Route::get('accept-order/{id}',[OrdersController::class,'accept_order'])->name('admin.accept_order');
+Route::get('reject-order/{id}',[OrdersController::class,'reject_order'])->name('admin.reject_order');
 
 #Users Route
 // Route::get('users-nav',[UserController::class,'navbar'])->name('users.navbar');
