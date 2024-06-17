@@ -2,17 +2,53 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
-use DB;
+// use DB;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
     public function dashboard(){
+        $totalUsers = User::where('status',1)->count();
+        $totalOrders = Order::count();
+        $totalSalesman = User::where('role',2)->where('status',1)->count();
         $activePage = 'dashboard';
         $user = session('user'); // Retrieve the flashed data from the session
 
-        return view('admin.dashboard', compact('user','activePage'));
+        $orders = DB::table('orders')
+            ->select(DB::raw('COUNT(*) as order_count'), DB::raw('MONTH(created_at) as month'))
+            ->groupBy(DB::raw('MONTH(created_at)'))
+            ->get();
+        $months = [
+            1 => 'January',
+            2 => 'February',
+            3 => 'March',
+            4 => 'April',
+            5 => 'May',
+            6 => 'June',
+            7 => 'July',
+            8 => 'August',
+            9 => 'September',
+            10 => 'October',
+            11 => 'November',
+            12 => 'December',
+        ];
+        
+        $orderData = array_fill(1, 12, 0); // Initialize array with 0 values for each month
+        
+        foreach ($orders as $order) {
+            $orderData[$order->month] = $order->order_count;
+        }
+        
+        $OrderschartData = [
+            'labels' => array_values($months),
+            'data' => array_values($orderData),
+        ];
+        
+
+        return view('admin.dashboard', compact('user','activePage','totalUsers','totalOrders','totalSalesman','OrderschartData'));
     }
 
     public function users(){
@@ -162,6 +198,11 @@ class AdminController extends Controller
         }else{
             return back()->withInput()->withErrors(['user' => 'Something went wrong ! please try again']);
         }
+    }
+
+    public function upload_users(){
+        $activePage = "users";
+        return view('admin.users.users_csv',compact('activePage'));
     }
     
 }

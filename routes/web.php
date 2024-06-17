@@ -28,6 +28,7 @@ Route::post('/login', [UserController::class, 'login'])->name('users.login');
 #Admin Routes
 Route::get('admin-dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard');
 Route::get('users',[AdminController::class,'users'])->name('admin.users');
+Route::get('upload-users',[AdminController::class,'upload_users'])->name('admin.upload_users');
 Route::get('create-users',[AdminController::class,'create_user'])->name('admin.create');
 Route::post('store-user',[AdminController::class,'store_user'])->name('admin.store_user');
 Route::get('edit-user/{id}',[AdminController::class,'edit_user'])->name('admin.edit_user');

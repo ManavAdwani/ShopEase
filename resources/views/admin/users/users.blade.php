@@ -78,6 +78,7 @@
             </div>
             <div class="addUser">
                 <a href="{{route('admin.create')}}" class="btn btn-sm btn-primary">Add User</a>
+                <a href="{{route('admin.upload_users')}}" class="btn btn-sm btn-primary">Upload users csv</a>
             </div>
         </div>
         <br><br>
