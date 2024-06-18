@@ -204,5 +204,36 @@ class AdminController extends Controller
         $activePage = "users";
         return view('admin.users.users_csv',compact('activePage'));
     }
+
+    public function store_csv_users(Request $request){
+        // dd($request->all());
+        $usersData = $request->usersData;
+        // dd($usersData);
+
+        foreach ($usersData as $userData) {
+            $input = [
+                'name' => $userData[0],
+                'email' => $userData[1],
+                // 'role' will be assigned based on the condition below
+                'phone' => $userData[3],
+                'password'=>bcrypt('secret123'),
+                'status'=>1,
+            ];
+
+            if ($userData[2] == "User") {
+                $input['role'] = 3;
+            } elseif ($userData[2] == "Sales person") {
+                $input['role'] = 2;
+            } else {
+                $input['role'] = 1;
+            }
+
+
+            // Save the data into the database
+            User::create($input);
+        }
+
+        return redirect()->route('admin.users')->with('success','Users stored successfully !');
+    }
     
 }

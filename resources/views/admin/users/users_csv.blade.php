@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Sainath mobiles - Create Users</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{asset('css/upload_users.css')}}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
@@ -44,12 +45,16 @@
                 </div>
             </div>
         </div>
-        <div id="csv-preview" class="table-responsive">
-            <table class="table table-bordered">
-                <thead></thead>
-                <tbody></tbody>
-            </table>
-        </div>
+        <form id="csv-form">
+            <div id="csv-preview" class="table-responsive">
+                <table class="table table-bordered">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <button type="button" id="submit-data" class="btn btn-success">Submit Valid Data</button>
+        </form>
+        
     </div>
 
 
@@ -60,6 +65,7 @@
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
     <script src="{{asset('js/upload_users.js')}}"></script>
     <script>
+        var store_csv = "{{route('admin.store_csv_users')}}";
         function readURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();

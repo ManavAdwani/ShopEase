@@ -52,6 +52,8 @@ Route::post('update-cart-admin',[OrdersController::class,'update_cart_admin'])->
 Route::get('accept-order/{id}',[OrdersController::class,'accept_order'])->name('admin.accept_order');
 Route::get('reject-order/{id}',[OrdersController::class,'reject_order'])->name('admin.reject_order');
 
+Route::post('store-csv-users',[AdminController::class,'store_csv_users'])->name('admin.store_csv_users');
+
 #Users Route
 // Route::get('users-nav',[UserController::class,'navbar'])->name('users.navbar');
 Route::get('homepage',[UserController::class,'user_homepage'])->name('users.homepage');

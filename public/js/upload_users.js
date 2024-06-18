@@ -103,7 +103,7 @@ $(document).on("change", ".file", function () {
             }
 
             // Phone number validation (exactly 10 digits)
-            var phoneRegex = /^\d{10}$/;
+            var phoneRegex = /^\d{11}$/;
             if (!phoneRegex.test(phone)) {
                 return "Invalid phone format";
             }
@@ -201,3 +201,38 @@ function validateRow(cells) {
 
     return true;
 }
+
+
+$(document).on("click", "#submit-data", function () {
+    var validRows = [];
+    $("#csv-preview tbody tr").each(function () {
+        var checkbox = $(this).find("input[type='checkbox']");
+        if (checkbox.is(":checked")) {
+            var cells = $(this).find("td").map(function () {
+                return $(this).text();
+            }).get();
+            // Remove the checkbox and validation columns
+            cells.shift();
+            cells.pop();
+            validRows.push(cells);
+        }
+    });
+
+    // Send validRows to the server
+    // jsonData = JSON.stringify(validRows);
+    $.ajax({
+        url: store_csv,
+        type: 'POST',
+        contentType: 'application/json',
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        data: JSON.stringify({ 'usersData': validRows }),
+        success: function (response) {
+            alert("Data submitted successfully!");
+        },
+        error: function (error) {
+            alert("Error submitting data: " + error);
+        }
+    });
+});
