@@ -53,6 +53,7 @@
                 </table>
             </div>
             <button type="button" id="submit-data" class="btn btn-success">Submit Valid Data</button>
+            <a href="{{route('admin.download_users_csv')}}" class="btn btn-danger">Download sample file</a>
         </form>
         
     </div>
@@ -66,6 +67,7 @@
     <script src="{{asset('js/upload_users.js')}}"></script>
     <script>
         var store_csv = "{{route('admin.store_csv_users')}}";
+        var check_email = "{{route('admin.check_email')}}";
         function readURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();

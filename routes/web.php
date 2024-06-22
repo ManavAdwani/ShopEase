@@ -24,6 +24,9 @@ Route::get('/', function () {
 });
 
 Route::post('/login', [UserController::class, 'login'])->name('users.login');
+Route::post('logout', [UserController::class, 'logout'])->name('users.logout');
+Route::get('settings',[AdminController::class,'settings'])->name('users.settings');
+Route::post('setting-update',[AdminController::class,'setting_update'])->name('admin.setting_update');
 
 #Admin Routes
 Route::get('admin-dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard');
@@ -53,6 +56,8 @@ Route::get('accept-order/{id}',[OrdersController::class,'accept_order'])->name('
 Route::get('reject-order/{id}',[OrdersController::class,'reject_order'])->name('admin.reject_order');
 
 Route::post('store-csv-users',[AdminController::class,'store_csv_users'])->name('admin.store_csv_users');
+Route::post('check_email',[UserController::class,'check_email'])->name('admin.check_email');
+Route::get('download_csv',[AdminController::class,'download_users_csv'])->name('admin.download_users_csv');
 
 #Users Route
 // Route::get('users-nav',[UserController::class,'navbar'])->name('users.navbar');

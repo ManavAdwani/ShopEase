@@ -40,4 +40,17 @@ class UserController extends Controller
     public function user_homepage(){
         return view('users.homepage');
     }
+
+    public function logout(Request $request){
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
+    }
+
+    public function check_email(Request $request){
+        $email = $request->email ?? '';
+        $exists = User::where('email', $email)->exists();
+    return response()->json(['exists' => $exists]);
+    }
 }

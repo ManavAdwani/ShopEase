@@ -8,7 +8,16 @@
     <title>Nav</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<style>
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+</style>
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
 
@@ -198,25 +207,53 @@
 <body id="body-pd">
     <header class="header" id="header">
         <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
-        <div class="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt=""> </div>
+        {{--<div class="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt=""> </div>--}}
     </header>
     <div class="l-navbar" id="nav-bar">
         <nav class="nav">
-            <div> <a href="#" class="nav_logo"> <i class='bx bx-layer nav_logo-icon'></i> <span
-                        class="nav_logo-name">Sainath Mobiles</span> </a>
+        @php
+    $navbardetails = DB::table('admin_nav_bar')->select()->first();
+    $website_name = $navbardetails->name ?? 'ShopEase';
+    $website_logo = $navbardetails ? $navbardetails->logo : '';
+@endphp
+
+            <div> <a href="#" class="nav_logo">
+    <?php if ($website_logo): ?>
+        <img src="{{ asset('Laravel/storage/app/public/'.$navbardetails->logo) }}" alt="Logo" class="nav_logo-icon" style="height: 24px; width: auto;">
+    <?php else: ?>
+        <i class='bx bx-layer nav_logo-icon'></i>
+    <?php endif; ?>
+    <span class="nav_logo-name">{{$website_name}}</span>
+</a>
+
                 <div class="nav_list">
-                    <a title="Home" href="{{route('admin.dashboard')}}" class="nav_link {{ $activePage == 'dashboard' ? 'active' : '' }}"> <i
-                            class='bx bx-grid-alt nav_icon'></i>
+                    <a title="Home" href="{{route('admin.dashboard')}}" class="nav_link {{ $activePage == 'dashboard' ? 'active' : '' }}"> <span class="material-symbols-outlined">
+dashboard
+</span>
                         <span class="nav_name">Dashboard</span> </a>
-                    <a title="Users" href="{{route('admin.users')}}" class="nav_link {{ $activePage == 'users' ? 'active' : '' }}"> <i class='bx bx-user nav_icon'></i> <span
+                    <a title="Users" href="{{route('admin.users')}}" class="nav_link {{ $activePage == 'users' ? 'active' : '' }}"> <span class="material-symbols-outlined">
+group
+</span> <span
                             class="nav_name">Users</span> </a>
-                    <a title="Products" href="{{route('admin.products')}}" class="nav_link {{ $activePage == 'products' ? 'active' : '' }}"> <i class='bx bx-mobile-alt nav_icon'></i> <span
+                    <a title="Products" href="{{route('admin.products')}}" class="nav_link {{ $activePage == 'products' ? 'active' : '' }}"> <span class="material-symbols-outlined">
+inventory_2
+</span> <span
                             class="nav_name">Products</span> </a>
-                            <a title="Orders" href="{{route('admin.orders')}}" class="nav_link {{ $activePage == 'orders' ? 'active' : '' }}"> <i class='bx bx-cart nav_icon'></i> <span
+                            <a title="Orders" href="{{route('admin.orders')}}" class="nav_link {{ $activePage == 'orders' ? 'active' : '' }}"> <span class="material-symbols-outlined">
+shopping_cart
+</span><span
                                 class="nav_name">Orders</span> </a>
+                    <a title="Settings" href="{{route('users.settings')}}" class="nav_link {{ $activePage == 'settings' ? 'active' : '' }}"> <span class="material-symbols-outlined">
+settings
+</span> <span
+                                class="nav_name">Settings</span> </a>
                 </div>
-            </div> <a title="Sign out" href="#" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span
-                    class="nav_name">SignOut</span> </a>
+            </div> 
+                <a title="Logout" href="{{route('users.logout')}}" class="nav_link {{ $activePage == 'orders' ? 'active' : '' }}" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();"> <i class='bx bx-log-out nav_icon'></i> <span
+                                class="nav_name">Logout</span> </a>
+                                <form id="frm-logout" action="{{ route('users.logout') }}" method="POST" style="display: none;">
+    {{ csrf_field() }}
+</form>
         </nav>
     </div>
     <!--Container Main end-->
