@@ -53,4 +53,10 @@ class UserController extends Controller
         $exists = User::where('email', $email)->exists();
     return response()->json(['exists' => $exists]);
     }
+
+    public function check_phone(Request $request){
+        $phone = $request->phone ?? '';
+        $exists = User::where('phone', $phone)->exists();
+        return response()->json(['exists' => $exists]);
+    }
 }

@@ -14,6 +14,17 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+#monthlyOrderData {
+    border: none;
+    outline: none;
+}
+
+canvas {
+    border: none;
+    outline: none;
+}
+    </style>
 </head>
 
 <body>
@@ -76,14 +87,15 @@
         </div>
     </div>
     <br>
-    <div class="container m-5">
+    <div class="container" style="margin-top:100px;">
         <div
-            style="width: 100%; margin: auto;margin-bottom:100px;box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;position: relative;">
+            style="width: 100%; margin: auto;margin-bottom:100px;box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.9) 0px 0px 0px 1px;position: relative;border-radius:10px">
             <canvas id="monthlyOrderData"></canvas>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         var ctx = document.getElementById('monthlyOrderData').getContext('2d');
     var myChart = new Chart(ctx, {
@@ -93,8 +105,22 @@
             datasets: [{
                 label: 'Orders',
                 data: @json($OrderschartData['data']),
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
                 borderWidth: 1,
             }]
         },

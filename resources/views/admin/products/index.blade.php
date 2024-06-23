@@ -61,7 +61,9 @@
             </div>
             <div class="addUser">
                 <a href="{{route('admin.create_product')}}" class="btn btn-sm btn-primary">Add Product</a>
+                <a href="{{route('admin.upload_products')}}" class="btn btn-sm btn-danger">Upload products csv</a>
             </div>
+            
         </div>
         <br><br>
         @if ($errors->any())
@@ -84,7 +86,7 @@
         <div class="container" style="display: flex; flex-wrap:wrap; justify-content:left; gap:20px;">
             @foreach ($products as $item)
             <div class="card mt-4" style="width: 18rem;">
-                @if ($item->images)
+            @if ($item->images)
                 @php
                     // Split the comma-separated string into an array
                     $imagesArray = explode(',', $item->images);
@@ -101,7 +103,7 @@
                <p style="display: none">{{$cnt++}}</p> 
                 @endforeach
             @else
-                <img src="https://cdn-cemal.nitrocdn.com/iwTMUnSsYeigzDpMWgwdBZhpcIeWwszq/assets/images/optimized/rev-725ed2c/www.aaronfaber.com/wp-content/uploads/2017/03/product-placeholder-wp-95907_800x675.jpg" alt="" style="width:auto;height:300px">
+                <img src="https://www.incathlab.com/images/products/default_product.png" alt="" style="width:auto;height:300px">
             @endif
             
                 <div class="card-body">

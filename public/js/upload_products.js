@@ -1,3 +1,7 @@
+$(document).ready(function() {
+    // $('#submit-data').prop('disabled', true);
+});
+
 $(document).on("click", ".browse", function () {
     var file = $(this).parent().parent().parent().find(".file");
     file.trigger("click");
@@ -28,7 +32,6 @@ function displayCSVContent(csvContent) {
 
     var allValid = true;
 
-    // Keep track of already validated emails and phone numbers
     var validatedEmails = new Set();
     var validatedPhones = new Set();
 
@@ -56,9 +59,10 @@ function displayCSVContent(csvContent) {
             validateRow(cells, validatedEmails, validatedPhones, function(validationResult) {
                 if (validationResult !== true) {
                     validationCell.addClass("warning").text(validationResult);
+                    checkbox.find("input").prop("checked", false);  // Uncheck if validation fails
                     allValid = false;
                 } else {
-                    checkbox.find("input").prop("checked", true);
+                    checkbox.find("input").prop("checked", true);  // Check if validation passes
                 }
                 row.append(validationCell);
             });
@@ -67,105 +71,66 @@ function displayCSVContent(csvContent) {
         }
     });
 
-    // Enable or disable the submit button based on validation results
     // $('#submit-data').prop('disabled', !allValid);
 }
 
+
 function validateRow(cells, validatedEmails, validatedPhones, callback) {
-    // Check if the row has exactly 4 columns (Name, Email, Role, Phone)
-    if (cells.length !== 4) {
+    if (cells.length !== 5) {
         callback("Invalid number of columns");
         return;
     }
 
     var name = cells[0].trim();
-    var email = cells[1].trim();
-    var role = cells[2].trim();
-    var phone = cells[3].trim();
+    var company = cells[1].trim();
+    var category = cells[2].trim();
+    var price = cells[3].trim();
+    var quantity = cells[4].trim();
 
-    // Check if all fields are non-empty
     if (!name) {
         callback("Invalid name");
         return;
     }
-    if (!email) {
-        callback("Invalid email");
+    if (!company) {
+        callback("Invalid company");
         return;
     }
-    if (!role) {
-        callback("Invalid role");
+    if (!category) {
+        callback("Invalid category");
         return;
     }
-    if (!phone) {
-        callback("Invalid phone");
+    if (!price) {
+        callback("Invalid price");
         return;
     }
-
-    // Email validation regex
-    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        callback("Invalid email format");
+    if(!quantity){
+        callback("Invalid quantity");
         return;
     }
 
-    // Phone number validation (exactly 10 digits)
-    var phoneRegex = /^\d{10}$/;
-    if (!phoneRegex.test(phone)) {
-        callback("Invalid phone format");
-        return;
-    }
-
-    // Check if the email is already validated
-    if (validatedEmails.has(email) && validatedPhones.has(phone)) {
-        callback(true);
-        return;
-    }
-
-    // Make an AJAX call to the server to check if the email is already registered
     $.ajax({
-        url: check_email, // URL to your server-side email validation endpoint
+        url: check_product, // URL to your server-side phone validation endpoint
         type: 'POST',
-        data: JSON.stringify({ email: email }),
+        data: JSON.stringify({ name: name,company:company }),
         contentType: 'application/json',
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
         success: function(response) {
             if (response.exists) {
-                callback("Email is already registered");
+                callback("Product is added !");
+                checkbox.find("input").prop("checked", false);
             } else {
-                validatedEmails.add(email); // Add email to validated set
-                validatePhone();
+                validatedPhones.add(phone); // Add phone to validated set
+                callback(true); // All validations passed
             }
         },
         error: function(error) {
-            callback("Error validating email: " + error);
+            callback("Error validating phone: " + error);
         }
     });
 
-    function validatePhone() {
-        // Make an AJAX call to the server to check if the phone is already registered
-        $.ajax({
-            url: check_phone, // URL to your server-side phone validation endpoint
-            type: 'POST',
-            data: JSON.stringify({ phone: phone }),
-            contentType: 'application/json',
-            headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-            },
-            success: function(response) {
-                if (response.exists) {
-                    callback("Phone number is already registered");
-                } else {
-                    validatedPhones.add(phone); // Add phone to validated set
-                    callback(true); // All validations passed
-                }
-            },
-            error: function(error) {
-                callback("Error validating phone: " + error);
-            }
-        });
-    }
+    callback(true);
 }
 
 $(document).on("click", "#submit-data", function () {
@@ -175,7 +140,7 @@ $(document).on("click", "#submit-data", function () {
     if (isEmpty) {
         Swal.fire({
             title: 'Error!',
-            text: 'Please add csv file first !',
+            text: 'Please add csv file first!',
             icon: 'error',
         }).then((result) => {
             if (result.isConfirmed) {
@@ -192,14 +157,12 @@ $(document).on("click", "#submit-data", function () {
             var cells = $(this).find("td").map(function () {
                 return $(this).text();
             }).get();
-            // Remove the checkbox and validation columns
             cells.shift();
             cells.pop();
             validRows.push(cells);
         }
     });
 
-    // Send validRows to the server
     $.ajax({
         url: store_csv,
         type: 'POST',
@@ -207,11 +170,11 @@ $(document).on("click", "#submit-data", function () {
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
-        data: JSON.stringify({ 'usersData': validRows }),
+        data: JSON.stringify({ 'productsData': validRows }),
         success: function (response) {
             Swal.fire({
                 title: 'Success!',
-                text: 'Users added successfully !',
+                text: 'Products added successfully!',
                 icon: 'success',
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -222,7 +185,7 @@ $(document).on("click", "#submit-data", function () {
         error: function (error) {
             Swal.fire({
                 title: 'Error!',
-                text: 'Something went wrong! please try again later!',
+                text: 'Something went wrong! Please try again later!',
                 icon: 'error',
             }).then((result) => {
                 if (result.isConfirmed) {

@@ -32,8 +32,11 @@ Route::post('setting-update',[AdminController::class,'setting_update'])->name('a
 Route::get('admin-dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard');
 Route::get('users',[AdminController::class,'users'])->name('admin.users');
 Route::get('upload-users',[AdminController::class,'upload_users'])->name('admin.upload_users');
+Route::get('upload-products',[AdminController::class,'upload_products'])->name('admin.upload_products');
 Route::get('create-users',[AdminController::class,'create_user'])->name('admin.create');
 Route::post('store-user',[AdminController::class,'store_user'])->name('admin.store_user');
+Route::post('store-products',[ProductController::class,'store_products'])->name('admin.store_products');
+Route::post('check_product',[ProductController::class,'check_product'])->name('admin.check_product');
 Route::get('edit-user/{id}',[AdminController::class,'edit_user'])->name('admin.edit_user');
 Route::post('update-user/{id}',[AdminController::class,'update_user'])->name('admin.update_user');
 Route::get('change-password/{id}',[AdminController::class,'change_pass'])->name('admin.change_pass');
@@ -57,6 +60,7 @@ Route::get('reject-order/{id}',[OrdersController::class,'reject_order'])->name('
 
 Route::post('store-csv-users',[AdminController::class,'store_csv_users'])->name('admin.store_csv_users');
 Route::post('check_email',[UserController::class,'check_email'])->name('admin.check_email');
+Route::post('check_phone',[UserController::class,'check_phone'])->name('admin.check_phone');
 Route::get('download_csv',[AdminController::class,'download_users_csv'])->name('admin.download_users_csv');
 
 #Users Route

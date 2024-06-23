@@ -21,7 +21,7 @@
     @include('navbar')
 
     <div class="container">
-        <h3>Upload users</h3>
+        <h3>Upload products</h3>
         @if ($errors->any())
         <div>
             <ul>
@@ -65,11 +65,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{asset('js/upload_users.js')}}"></script>
+    <script src="{{asset('js/upload_products.js')}}"></script>
     <script>
-        var store_csv = "{{route('admin.store_csv_users')}}";
-        var check_email = "{{route('admin.check_email')}}";
-        var check_phone = "{{route('admin.check_phone')}}";
+        var store_csv = "{{route('admin.store_products')}}";
+        var check_product = "{{route('admin.check_product')}}";
         function readURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();

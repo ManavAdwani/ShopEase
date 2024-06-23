@@ -293,12 +293,18 @@ class AdminController extends Controller
 
     public function download_users_csv()
     {
-        $file = public_path('sample_csv/users_sample.csv');
+        $file = public_path('sample_csv/users_sample.csv.csv');
 
         $headers = array(
             'Content-Type: application/pdf',
         );
 
         return response()->download($file);
+    }
+
+
+    public function upload_products(){
+        $activePage = "products";
+        return view('admin.products.upload_products',compact('activePage'));
     }
 }

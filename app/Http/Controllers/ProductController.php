@@ -240,19 +240,19 @@ class ProductController extends Controller
             $query->where('category_id', $request->get('category'));
         }
 
-        if($request->get('company')){
-            $query->where('company_id',$request->get('company'));
+        if ($request->get('company')) {
+            $query->where('company_id', $request->get('company'));
         }
 
         if ($request->get('search')) {
             $query->where('product_name', 'LIKE', '%' . $request->get('search') . '%');
         }
-        
+
         // Paginate the results
         $products = $query->paginate(20);
 
         // Return the view with the fetched data
-        return view('users.products.index', compact('searched','categories', 'companies','selectedcom', 'products','selectedcat'));
+        return view('users.products.index', compact('searched', 'categories', 'companies', 'selectedcom', 'products', 'selectedcat'));
     }
 
     public function fav_product(Request $request)
@@ -286,34 +286,93 @@ class ProductController extends Controller
         }
     }
 
-    public function add_to_cart(Request $request){
+    public function add_to_cart(Request $request)
+    {
         $user_id = $request->user_id ?? 0;
         $product_id = $request->product_id ?? 0;
         $product_quantity = $request->pro_quan ?? 0;
 
         $product = Product::findOrFail($product_id);
         $input = [
-            'user_id'=>$user_id,
-            'product_id'=>$product_id,
-            'quantity'=>$product_quantity,
-            'status'=>"pending"
+            'user_id' => $user_id,
+            'product_id' => $product_id,
+            'quantity' => $product_quantity,
+            'status' => "pending"
         ];
 
-        $checkCart = Cart::where('product_id','=',$product_id)->where('user_id','=',$user_id)->where('status','pending')->select()->first();
-        if(!empty($checkCart->id)){
+        $checkCart = Cart::where('product_id', '=', $product_id)->where('user_id', '=', $user_id)->where('status', 'pending')->select()->first();
+        if (!empty($checkCart->id)) {
             $cart = Cart::findOrFail($checkCart->id);
             $oldQuantity = $cart->quantity;
             $newQuant = $oldQuantity + $product_quantity;
             $cart->quantity = $newQuant;
             $cart->update();
-            return response()->json(['data'=>$product->product_name,'status' => 'success', 'message' => 'Product added successfully in your cart !']); 
-        }else{
+            return response()->json(['data' => $product->product_name, 'status' => 'success', 'message' => 'Product added successfully in your cart !']);
+        } else {
             $cart = Cart::create($input);
-            if(!empty($cart->id)){
-                return response()->json(['data'=>$product->product_name,'status' => 'success', 'message' => 'Product added successfully in your cart !']); 
-            }else{
-                return response()->json(['status' => 'error', 'message' => 'Something went wrong please try again later !']); 
+            if (!empty($cart->id)) {
+                return response()->json(['data' => $product->product_name, 'status' => 'success', 'message' => 'Product added successfully in your cart !']);
+            } else {
+                return response()->json(['status' => 'error', 'message' => 'Something went wrong please try again later !']);
             }
         }
+    }
+
+    public function store_products(Request $request)
+    {
+        $productsData = $request->productsData;
+
+        foreach ($productsData as $product) {
+            $checkProduct = Product::where('product_name',$product[0])->exists();
+            if($checkProduct){
+                return;
+            }
+            $input = [
+                'product_name' => $product[0],
+                'product_price' => $product[3],
+                'images' => "",
+                'image_count'=>0,
+                'quantity'=>$product[4]
+            ];
+
+            // Handle company
+            $company = $product[1];
+            $checkCompany = Company::where('company_name', $company)->first();
+            if ($checkCompany) {
+                $input['company_id'] = $checkCompany->id;
+            } else {
+                $addCompany = Company::create(['company_name' => $company]);
+                $input['company_id'] = $addCompany->id;
+            }
+
+            // Handle category
+            $category = $product[2];
+            $checkCategory = Category::where('category_name', $category)->first();
+            if ($checkCategory) {
+                $input['category_id'] = $checkCategory->id;
+            } else {
+                $addCategory = Category::create(['category_name' => $category]);
+                $input['category_id'] = $addCategory->id;
+            }
+
+            // Debugging: ensure $input contains the required fields
+            if (!isset($input['company_id']) || !isset($input['category_id'])) {
+                return back()->with('error', 'Company or Category ID missing');
+            }
+            
+
+            // Ensure the Product model has 'company_id' and 'category_id' in its $fillable property
+            Product::create($input);
+        }
+
+        return back()->with('success', 'Products added successfully!');
+    }
+
+    public function check_product(Request $request){
+        $product_name = $request->name ?? '';
+        $company = $request->company ?? '';
+
+        $checkProduct = Product::where('product_name',$product_name)->exists();
+        return response()->json(['exists' => $checkProduct]);
     }
 }
