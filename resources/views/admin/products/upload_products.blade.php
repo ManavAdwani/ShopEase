@@ -53,7 +53,7 @@
                 </table>
             </div>
             <button type="button" id="submit-data" class="btn btn-success">Submit Valid Data</button>
-            <a href="{{route('admin.download_users_csv')}}" class="btn btn-danger">Download sample file</a>
+            <a href="{{route('admin.product_csv_download')}}" class="btn btn-danger">Download sample file</a>
         </form>
         
     </div>

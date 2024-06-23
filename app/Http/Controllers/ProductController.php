@@ -375,4 +375,15 @@ class ProductController extends Controller
         $checkProduct = Product::where('product_name',$product_name)->exists();
         return response()->json(['exists' => $checkProduct]);
     }
+
+    public function download_users_csv()
+    {
+        $file = public_path('sample_csv\products.csv');
+
+        $headers = array(
+            'Content-Type: application/pdf',
+        );
+
+        return response()->download($file);
+    }
 }

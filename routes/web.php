@@ -62,6 +62,7 @@ Route::post('store-csv-users',[AdminController::class,'store_csv_users'])->name(
 Route::post('check_email',[UserController::class,'check_email'])->name('admin.check_email');
 Route::post('check_phone',[UserController::class,'check_phone'])->name('admin.check_phone');
 Route::get('download_csv',[AdminController::class,'download_users_csv'])->name('admin.download_users_csv');
+Route::get('download_product_csv',[ProductController::class,'download_users_csv'])->name('admin.product_csv_download');
 
 #Users Route
 // Route::get('users-nav',[UserController::class,'navbar'])->name('users.navbar');
