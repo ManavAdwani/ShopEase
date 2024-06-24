@@ -260,31 +260,51 @@ class ProductController extends Controller
         $user_id = $request->user_id ?? 0;
         $product_id = $request->product_id ?? 0;
 
+        // Check if the product is already in the favourites
         $getFav = Favourite::where('product_id', $product_id)->select()->first();
+
         if (!empty($getFav->id)) {
             $DBuserId = $getFav->user_id;
-            if ($user_id == $DBuserId) {
-                return response()->json(['status' => 'error', 'message' => 'Already added in favourite list']);
-            } else {
-                $userIds = explode(",", $DBuserId);
-                $newUserId = $user_id;
-                $userIds[] = $newUserId;
+            $userIds = explode(",", $DBuserId);
+
+            if (in_array($user_id, $userIds)) {
+                // User has already favorited this product, so remove it from the favorites
+                $userIds = array_diff($userIds, [$user_id]);
                 $newIdsString = implode(",", $userIds);
                 $getFav->user_id = $newIdsString;
                 $getFav->update();
-                return response()->json(['status' => 'success', 'message' => 'Product added successfully in your favorite list !']);
+
+                // If no users are left, delete the record
+                if (empty($newIdsString)) {
+                    $getFav->delete();
+                }
+
+                return response()->json(['status' => 'success', 'message' => 'Product removed from your favorite list.']);
+            } else {
+                // Add user to the favorite list
+                $userIds[] = $user_id;
+                $newIdsString = implode(",", $userIds);
+                $getFav->user_id = $newIdsString;
+                $getFav->update();
+
+                return response()->json(['status' => 'success', 'message' => 'Product added successfully to your favorite list!']);
             }
         } else {
+            // No favorite entry found, create a new one
             $input = [
                 'user_id' => $user_id,
                 'product_id' => $product_id
             ];
             $fav_product = Favourite::create($input);
+
             if ($fav_product) {
-                return response()->json(['status' => 'success', 'message' => 'Product added successfully in your favorite list !']);
+                return response()->json(['status' => 'success', 'message' => 'Product added successfully to your favorite list!']);
+            } else {
+                return response()->json(['status' => 'error', 'message' => 'Failed to add product to your favorite list.']);
             }
         }
     }
+
 
     public function add_to_cart(Request $request)
     {
@@ -323,16 +343,16 @@ class ProductController extends Controller
         $productsData = $request->productsData;
 
         foreach ($productsData as $product) {
-            $checkProduct = Product::where('product_name',$product[0])->exists();
-            if($checkProduct){
+            $checkProduct = Product::where('product_name', $product[0])->exists();
+            if ($checkProduct) {
                 return;
             }
             $input = [
                 'product_name' => $product[0],
                 'product_price' => $product[3],
                 'images' => "",
-                'image_count'=>0,
-                'quantity'=>$product[4]
+                'image_count' => 0,
+                'quantity' => $product[4]
             ];
 
             // Handle company
@@ -359,7 +379,7 @@ class ProductController extends Controller
             if (!isset($input['company_id']) || !isset($input['category_id'])) {
                 return back()->with('error', 'Company or Category ID missing');
             }
-            
+
 
             // Ensure the Product model has 'company_id' and 'category_id' in its $fillable property
             Product::create($input);
@@ -368,11 +388,12 @@ class ProductController extends Controller
         return back()->with('success', 'Products added successfully!');
     }
 
-    public function check_product(Request $request){
+    public function check_product(Request $request)
+    {
         $product_name = $request->name ?? '';
         $company = $request->company ?? '';
 
-        $checkProduct = Product::where('product_name',$product_name)->exists();
+        $checkProduct = Product::where('product_name', $product_name)->exists();
         return response()->json(['exists' => $checkProduct]);
     }
 
@@ -385,5 +406,14 @@ class ProductController extends Controller
         );
 
         return response()->download($file);
+    }
+
+    public function fav_product_page(Request $request){
+        $activePage = 'products';
+        $user_id = auth()->user()->id;
+        $products = Product::join('favourites','products.id','=','favourites.product_id')->whereRaw("FIND_IN_SET(?, favourites.user_id)", [$user_id])->paginate(10);
+        $TotalProducts = Product::count();
+        $TotalCompanies = Company::count();
+        return view('users.products.fav_product', compact('activePage', 'products', 'TotalProducts', 'TotalCompanies'));
     }
 }

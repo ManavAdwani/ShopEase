@@ -69,6 +69,7 @@ Route::get('download_product_csv',[ProductController::class,'download_users_csv'
 Route::get('homepage',[UserController::class,'user_homepage'])->name('users.homepage');
 Route::get('user-products',[ProductController::class,'user_products'])->name('users.products');
 Route::post('fav_product',[ProductController::class,'fav_product'])->name('users.fav_pro');
+Route::get('favourite-product',[ProductController::class,'fav_product_page'])->name('users.fav_product_page');
 Route::post('add_to_cart',[ProductController::class,'add_to_cart'])->name('users.add_to_cart');
 Route::get('cart',[CartController::class,'cart_index'])->name('users.cart');
 Route::post('update_cart',[CartController::class,'update_cart'])->name('users.update_cart');

@@ -23,7 +23,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0" style="gap:10px;">
                     <li class="nav-item">
-                        <a class="nav-link active d-flex align-items-center" aria-current="page" href="#">
+                        <a class="nav-link active d-flex align-items-center" aria-current="page" href="{{route('users.homepage')}}">
                             <span class="material-symbols-outlined me-2">
                                 home
                             </span>
@@ -56,7 +56,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active d-flex align-items-center" aria-current="page" href="#">
+                        <a class="nav-link active d-flex align-items-center" aria-current="page" href="{{route('users.fav_product_page')}}">
                             <span class="material-symbols-outlined me-2">
                                 favorite
                             </span>

@@ -19,45 +19,20 @@
 
 <body>
     @include('usersNavBar');
-    <div class="container">
-        <form action="{{route('users.products')}}" method="GET">
-            <div class="row">
-                <div class="col-sm-4 mt-2">
-                    <select class="form-select" name="category" aria-label="Default select example">
-                        <option value="" selected>Select category</option>
-                        @foreach ($categories as $cat)
-                        <option value="{{$cat->id}}" @if ($selectedcat==$cat->id)
-                            selected
-                            @endif>{{$cat->category_name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-sm-4 mt-2">
-                    <select name="company" class="form-select" aria-label="Default select example">
-                        <option value="" selected>Select company</option>
-                        @foreach ($companies as $cam)
-                        <option value="{{$cam->id}}" @if($selectedcom==$cam->id)
-                            selected
-                            @endif>{{$cam->company_name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-sm-4 mt-2">
-                    <input class="form-control" type="text" value="{{$searched}}" name="search" id="search"
-                        placeholder="Search by product name">
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-sm-4">
-                    <button class="btn btn-sm btn-primary">Search</button>
-                </div>
-            </div>
-        </form>
-    </div>
 
     <div class="container mt-5">
-        <h4 class="mb-5">Products</h4>
+        <h4 class="mb-5">Favorite Products</h4>
         <div class="row mb-5">
+            @if ($products->isEmpty())
+            <center>
+                <div class="alert alert-info" role="alert">
+                    <h4 class="alert-heading">No Favorites</h4>
+                    <p>You have no products in your favorites list.</p>
+                    <hr>
+                    <a href="{{ route('users.products') }}" class="btn btn-primary">Browse Products</a>
+                  </div>
+            </center>
+            @else
             @foreach ($products as $product)
             <div class="col-sm-3 mt-3 d-flex justify-content-center">
                 <div class="card" style="width: 15rem; box-shadow: 10px 10px;">
@@ -147,6 +122,8 @@
             </div>
             @endforeach
 
+            @endif
+           
             <input type="hidden" id="cart_product">
         </div>
         {{ $products->links() }}
@@ -155,7 +132,7 @@
 
 
 
-    <script src="{{asset('js/user_product.js')}}"></script>
+    <script src="{{asset('js/fav_page.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>

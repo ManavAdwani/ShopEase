@@ -13,42 +13,17 @@ function addFavoriteProduct(product_ids) {
             user_id: user_id,
         },
         success: function (response) {
-            if (response) {
-                var unFilledHeart = document.getElementById(
-                    "unFilled_heart_" + product_id
-                );
-                var filledHeart = document.getElementById(
-                    "filled_heart_" + product_id
-                );
-
-                if (unFilledHeart && filledHeart) {
-                    // Check if both elements exist
-                    if (unFilledHeart.style.display !== "none") {
-                        unFilledHeart.style.display = "none";
-                        filledHeart.style.display = "block";
-                        Swal.fire({
-                            title: "Favorite",
-                            text: "Product added in favorites!",
-                            icon: "success"
-                          });
-                    } else {
-                        unFilledHeart.style.display = "block";
-                        filledHeart.style.display = "none";
-                        Swal.fire({
-                            title: "Favorite",
-                            text: "Product removed from favorites!",
-                            icon: "success"
-                          });
+            if(response){
+                Swal.fire({
+                    title: "Favorite",
+                    text: "Product removed from favorites!",
+                    icon: "success"
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      location.reload();
                     }
-                    
-                } else {
-                    console.error(
-                        "Elements not found: unFilled_heart_" +
-                            product_id +
-                            " or filled_heart_" +
-                            product_id
-                    );
-                }
+                  });
+                  
             }
         },
         error: function (xhr, status, error) {
