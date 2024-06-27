@@ -411,7 +411,7 @@ class ProductController extends Controller
     public function fav_product_page(Request $request){
         $activePage = 'products';
         $user_id = auth()->user()->id;
-        $products = Product::join('favourites','products.id','=','favourites.product_id')->whereRaw("FIND_IN_SET(?, favourites.user_id)", [$user_id])->paginate(10);
+        $products = Product::join('favourites','products.id','=','favourites.product_id')->whereRaw("FIND_IN_SET(?, favourites.user_id)", [$user_id])->select('products.id as pid','products.*','favourites.*')->paginate(10);
         $TotalProducts = Product::count();
         $TotalCompanies = Company::count();
         return view('users.products.fav_product', compact('activePage', 'products', 'TotalProducts', 'TotalCompanies'));

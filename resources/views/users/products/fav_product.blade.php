@@ -43,7 +43,7 @@
                     @endphp
                     <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
                         @if($firstImage)
-                        <img src="{{ asset($firstImage) }}" class="card-img-top" alt="..."
+                        <img src="{{ asset("Laravel/public/".$firstImage) }}" class="card-img-top" alt="..."
                             style="width: 200px; height: 200px;">
                         @else
                         <img src="https://www.incathlab.com/images/products/default_product.png" class="card-img-top"
@@ -70,44 +70,45 @@
                         <h5 class="card-text mt-4">₹{{$product->product_price}}</h5>
                         <div class="allBtns" style="display: flex; flex-wrap:wrap">
                             <div>
-                                <a id="addToCart{{$product->id}}" onclick="addToCart({{$product->id}})"
+                                <a id="addToCart{{$product->pid}}" onclick="addToCart({{$product->pid}})"
                                     title="Add to cart" class="btn btn-sm btn-link" style="margin-top: 09px;">
                                     <span class="material-symbols-outlined">
                                         shopping_cart
                                     </span>
                                 </a>
                                 <input type="text" class="form-control" name="" placeholder="Enter Quantity"
-                                    id="pro_quan{{$product->id}}" style="display: none;width:100%">
+                                    id="pro_quan{{$product->pid}}" style="display: none;width:100%">
                                 <div class="btns" style="display: flex;flex-wrap:wrap;justify-content:space-between">
                                     <div>
-                                        <button onclick="addToCartButton({{$product->id}})"
+                                        <button onclick="addToCartButton({{$product->pid}})"
                                             style="display: none;width:100%" title="Add to cart"
-                                            class="btn btn-sm btn-primary" id="addBtn{{$product->id}}"><i
+                                            class="btn btn-sm btn-primary" id="addBtn{{$product->pid}}"><i
                                                 class='fas fa-plus'></i></button>
                                     </div>
                                     <div>
-                                        <button onclick="cancelCartButton({{$product->id}})"
+                                        <button onclick="cancelCartButton({{$product->pid}})"
                                             style="display: none;width:100%" title="Cancel"
-                                            class="btn btn-sm btn-danger" id="cancelBtn{{$product->id}}"><i
+                                            class="btn btn-sm btn-danger" id="cancelBtn{{$product->pid}}"><i
                                                 class='fas fa-times'></i></button>
                                     </div>
                                 </div>
                             </div>
                             <div>
                                 @php
-                                $getFav = DB::table('favourites')->where('product_id',$product->id)->select()->first();
+                                $getFav = DB::table('favourites')->where('product_id',$product->pid)->select()->first();
+                                
                                 $FavList = $getFav->user_id ?? '';
                                 $FavArray = explode(',', $FavList); // Convert comma-separated list to array
                                 $userId = auth()->user()->id;
                                 @endphp
-                                <a onclick="addFavoriteProduct({{$product->id}})" title="View"
+                                <a onclick="addFavoriteProduct({{$product->pid}})" title="View"
                                     class="btn btn-sm btn-link mt-1">
                                     <i class='fas fa-heart mt-2' style='font-size:23px;color:red;display:none'
-                                        id="filled_heart_{{$product->id}}"></i>
+                                        id="filled_heart_{{$product->pid}}"></i>
                                     @if(in_array($userId, $FavArray))
                                     <i class='fas fa-heart mt-1' style='font-size:25px;color:red'></i>
                                     @else
-                                    <span id="unFilled_heart_{{$product->id}}" class="material-symbols-outlined"
+                                    <span id="unFilled_heart_{{$product->pid}}" class="material-symbols-outlined"
                                         style="margin-top:5px;color:red">
                                         favorite
                                     </span>

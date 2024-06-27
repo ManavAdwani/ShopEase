@@ -33,7 +33,8 @@ class UserController extends Controller
             return response()->json(['message' => 'Login successful', 'user' => $user]);
         } else {
             // Authentication failed...
-            return response()->json(['message' => 'Invalid credentials'], 401);
+            // return response()->json(['message' => 'Invalid credentials'], 401);
+            return back()->with('error','Invalid credentials');
         }
     }
 

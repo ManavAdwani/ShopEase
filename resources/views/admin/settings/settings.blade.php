@@ -53,7 +53,7 @@
                 <input class="form-control" name="website_logo" type="file" id="formFileMultiple" accept="image/*">
                 <div class="image-preview mt-2" id="imagePreview"></div>
                 @if(!empty($settingDB))
-                        <img src="{{ asset('Laravel/storage/app/public/'.$website_logo) }}" alt="Logo" class="nav_logo-icon" style="height: 100px; width: auto;">
+                        <img src="{{ asset('storage/'.$website_logo) }}" alt="Logo" class="nav_logo-icon" style="height: 100px; width: auto;">
                 @endif
             </div>
             <div class="row mb-4">

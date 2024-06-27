@@ -219,7 +219,7 @@
 
             <div> <a href="#" class="nav_logo">
     <?php if ($website_logo): ?>
-        <img src="{{ asset('Laravel/storage/app/public/'.$navbardetails->logo) }}" alt="Logo" class="nav_logo-icon" style="height: 24px; width: auto;">
+        <img src="{{ asset("storage/".$navbardetails->logo) }}" alt="Logo" class="nav_logo-icon" style="height: 24px; width: auto;">
     <?php else: ?>
         <i class='bx bx-layer nav_logo-icon'></i>
     <?php endif; ?>

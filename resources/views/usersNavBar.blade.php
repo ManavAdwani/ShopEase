@@ -13,8 +13,18 @@
 
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    @php
+    $navbardetails = DB::table('admin_nav_bar')->select()->first();
+    $website_name = $navbardetails->name ?? 'ShopEase';
+    $website_logo = $navbardetails ? $navbardetails->logo : '';
+@endphp
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Sainath Mobiles</a>
+        <?php if ($website_logo): ?>
+        <img src="{{ asset("storage/".$navbardetails->logo) }}" alt="Logo" class="nav_logo-icon" style="height: 50px; width: auto;">
+    <?php else: ?>
+        <i class='bx bx-layer nav_logo-icon'></i>
+    <?php endif; ?>
+            <a class="navbar-brand" href="#">{{$website_name}}</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
