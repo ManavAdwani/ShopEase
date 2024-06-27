@@ -9,6 +9,8 @@ use App\Models\Favourite;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Str;
+
 
 
 class ProductController extends Controller
@@ -38,7 +40,9 @@ class ProductController extends Controller
             'company_id' => 'required',
             'category_id' => 'required',
             'product_price' => 'required',
-            'product_images' => 'required'
+            'product_images' => 'required',
+            'model_number'=>'required|unique:products',
+            'color'=>'required'
         ]);
 
         $product_images = $request->file('product_images');
@@ -46,6 +50,10 @@ class ProductController extends Controller
         $product_company = $request->input('company_id') ?? 0;
         $product_category = $request->input('category_id') ?? 0;
         $product_price = $request->input('product_price') ?? 0;
+        $model_number = $request->input('model_number') ?? 0;
+        $product_color = $request->input('color');
+        $product_quantity = $request->input('quantity');
+        $sku = Str::slug($product_name);
 
         $imagePaths = [];
         $image_cnt = 0;
@@ -80,6 +88,10 @@ class ProductController extends Controller
         $product->category_id = $product_category;
         $product->product_price = $product_price;
         $product->image_count = $image_cnt;
+        $product->model_number = $model_number;
+        $product->color = $product_color;
+        $product->sku = $sku;
+        $product->quantity = $product_quantity;
         $product->save();
         return redirect()->route('admin.products')->with('success', 'Product addedd successfully !');
     }
@@ -105,10 +117,13 @@ class ProductController extends Controller
         $selectedcategory = $product->category_id ?? 0;
         $price = $product->product_price ?? 0;
         $images = $product->images ?? '';
+        $model_number = $product->model_number ?? 0;
+        $quantity = $product->quantity ?? 0;
+        $color = $product->color ?? '';
         $companies = Company::all();
         $categories = Category::all();
         $product_id = $id ?? 0;
-        return view('admin.products.edit_product', compact('product_id', 'activePage', 'companies', 'categories', 'product', 'name', 'selectedcompany', 'selectedcategory', 'price', 'images'));
+        return view('admin.products.edit_product', compact('model_number','color','quantity','product_id', 'activePage', 'companies', 'categories', 'product', 'name', 'selectedcompany', 'selectedcategory', 'price', 'images'));
     }
 
     public function create_company(Request $request)
@@ -343,7 +358,7 @@ class ProductController extends Controller
         $productsData = $request->productsData;
 
         foreach ($productsData as $product) {
-            $checkProduct = Product::where('product_name', $product[0])->exists();
+            $checkProduct = Product::where('product_name', $product[0])->orWhere('model_number',$product[5])->exists();
             if ($checkProduct) {
                 return;
             }
@@ -352,8 +367,12 @@ class ProductController extends Controller
                 'product_price' => $product[3],
                 'images' => "",
                 'image_count' => 0,
-                'quantity' => $product[4]
+                'quantity' => $product[4],
+                'model_number'=>$product[5],
+                'color'=>$product[6]
             ];
+            $sku = Str::slug($product[0]);
+            $input['sku']=$sku;
 
             // Handle company
             $company = $product[1];
@@ -391,9 +410,9 @@ class ProductController extends Controller
     public function check_product(Request $request)
     {
         $product_name = $request->name ?? '';
-        $company = $request->company ?? '';
+        $model_number = $request->model_number ?? '';
 
-        $checkProduct = Product::where('product_name', $product_name)->exists();
+        $checkProduct = Product::where('product_name', $product_name)->orWhere('model_number',$model_number)->exists();
         return response()->json(['exists' => $checkProduct]);
     }
 

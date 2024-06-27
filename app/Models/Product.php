@@ -16,5 +16,8 @@ class Product extends Model
         'product_price',
         'image_count',
         'quantity',
+        'color',
+        'sku',
+        'model_number'
     ];
 }

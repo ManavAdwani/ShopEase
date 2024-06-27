@@ -44,6 +44,15 @@
             <div class="row mb-4">
                 <div class="col">
                     <div data-mdb-input-init class="form-outline">
+                        <label class="form-label" for="form6Example1">Model number</label>
+                        <input type="text" name="model_number" placeholder="Model number" id="form6Example1"
+                            class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col">
+                    <div data-mdb-input-init class="form-outline">
                         <label class="form-label" for="form6Example1">Product name</label>
                         <input type="text" name="product_name" placeholder="Product name" id="form6Example1"
                             class="form-control" />
@@ -86,11 +95,24 @@
                     </button>
                 </div>
             </div>
-
+            <div class="row mb-4">
+                <div class="col">
+                    <div data-mdb-input-init class="form-outline">
+                        <label class="form-label" for="form6Example1">Color</label>
+                        <input type="text" name="color" placeholder="Color" id="form6Example1"
+                            class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div data-mdb-input-init class="form-outline mb-4">
+                <label class="form-label" for="form6Example4">Product quantity</label>
+                <input type="number" name="quantity" id="form6Example4" placeholder="Product quantity"
+                    class="form-control" />
+            </div>
             <!-- Text input -->
             <div data-mdb-input-init class="form-outline mb-4">
                 <label class="form-label" for="form6Example4">Product price</label>
-                <input type="text" name="product_price" id="form6Example4" placeholder="product_price"
+                <input type="number" name="product_price" id="form6Example4" placeholder="Product price"
                     class="form-control" />
             </div>
 

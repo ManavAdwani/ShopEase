@@ -83,7 +83,7 @@
             {{ session('success') }}
         </div>
         @endif
-        <div class="container" style="display: flex; flex-wrap:wrap; justify-content:left; gap:20px;">
+        <div class="container" style="display: flex; flex-wrap:wrap; justify-content:space-around;">
             @foreach ($products as $item)
             <div class="card mt-4" style="width: 18rem;">
             @if ($item->images)
@@ -113,6 +113,9 @@
                       $company_name = $companydeets->company_name ?? 'N/A';
                   @endphp
                   <p class="card-text"><b>Company - {{$company_name}}</b></p>
+                  <p class="card-text" @if ($item->quantity == 0)
+                      style="color:red"
+                  @endif><b>Quantity - {{$item->quantity}}</b></p>
                   <p class="card-text" style="font-size:20px;"><b>{{$item->product_price}}/-</b></p>
                   <div class="btns" style="display: flex; justify-content:space-between">
                     <div class="editBtn">

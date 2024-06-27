@@ -76,7 +76,7 @@ function displayCSVContent(csvContent) {
 
 
 function validateRow(cells, validatedEmails, validatedPhones, callback) {
-    if (cells.length !== 5) {
+    if (cells.length !== 7) {
         callback("Invalid number of columns");
         return;
     }
@@ -86,6 +86,8 @@ function validateRow(cells, validatedEmails, validatedPhones, callback) {
     var category = cells[2].trim();
     var price = cells[3].trim();
     var quantity = cells[4].trim();
+    var model_number = cells[5].trim();
+    var color = cells[6].trim()
 
     if (!name) {
         callback("Invalid name");
@@ -107,11 +109,19 @@ function validateRow(cells, validatedEmails, validatedPhones, callback) {
         callback("Invalid quantity");
         return;
     }
+    if(!model_number){
+        callback("Invalid model number");
+        return;
+    }
+    if(!color){
+        callback("Invalid color");
+        return;
+    }
 
     $.ajax({
         url: check_product, // URL to your server-side phone validation endpoint
         type: 'POST',
-        data: JSON.stringify({ name: name,company:company }),
+        data: JSON.stringify({ name: name,model_number:model_number }),
         contentType: 'application/json',
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
