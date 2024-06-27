@@ -179,6 +179,8 @@ class ProductController extends Controller
                 'company_id' => 'required',
                 'category_id' => 'required',
                 'product_price' => 'required',
+                'model_number'=>'required',
+                'color'=>'required'
             ]);
 
             $oldImages = $product->images ?? '';
@@ -190,6 +192,10 @@ class ProductController extends Controller
             $product_company = $request->input('company_id') ?? 0;
             $product_category = $request->input('category_id') ?? 0;
             $product_price = $request->input('product_price') ?? 0;
+            $model_number = $request->input('model_number') ?? 0;
+        $product_color = $request->input('color');
+        $product_quantity = $request->input('quantity');
+        $sku = Str::slug($product_name);
 
             $imagePaths = [];
             $image_cnt = 0;
@@ -229,6 +235,10 @@ class ProductController extends Controller
             $product->category_id = $product_category;
             $product->product_price = $product_price;
             $product->image_count = $image_cnt + $oldImageCount;
+            $product->model_number = $model_number;
+            $product->color = $product_color;
+            $product->sku = $sku;
+            $product->quantity = $product_quantity;
             $product->save();
             return redirect()->route('admin.products')->with('success', 'Product Updated successfully !');
         } else {
