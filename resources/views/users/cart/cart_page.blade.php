@@ -103,7 +103,7 @@
                             <a href="{{route('users.products')}}" type="button" data-mdb-button-init data-mdb-ripple-init
                                 class="btn btn-sm btn-danger btn-lg me-2">Back to products</a>
                             <a href="{{route('users.address')}}" type="button" data-mdb-button-init data-mdb-ripple-init
-                                class="btn btn-sm btn-primary btn-lg">Order now</a>
+                                class="btn btn-sm btn-primary btn-lg" @if ($cartProducts->isEmpty()) style="display:none;" @endif>Order now</a>
                         </div>
 
                     </div>

@@ -43,7 +43,7 @@
                     @endphp
                     <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
                         @if($firstImage)
-                        <img src="{{ asset("Laravel/public/".$firstImage) }}" class="card-img-top" alt="..."
+                        <img src="{{ asset($firstImage) }}" class="card-img-top" alt="..."
                             style="width: 200px; height: 200px;">
                         @else
                         <img src="https://www.incathlab.com/images/products/default_product.png" class="card-img-top"

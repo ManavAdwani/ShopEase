@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -39,8 +42,11 @@ class UserController extends Controller
     }
 
     public function user_homepage(){
-        return view('users.homepage');
+        $lastMonth = Carbon::now()->subMonth();
+        $newLaunched = Product::where('created_at', '>=', $lastMonth)->get();
+        return view('users.homepage', compact('newLaunched'));
     }
+    
 
     public function logout(Request $request){
         Auth::logout();
