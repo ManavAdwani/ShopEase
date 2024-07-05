@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
+use App\Jobs\ProcessProducts;
 
 
 
@@ -18,7 +19,7 @@ class ProductController extends Controller
     public function index()
     {
         $activePage = 'products';
-        $products = Product::all();
+        $products = Product::paginate(20);
         $TotalProducts = Product::count();
         $TotalCompanies = Company::count();
         return view('admin.products.index', compact('activePage', 'products', 'TotalProducts', 'TotalCompanies'));
@@ -41,8 +42,8 @@ class ProductController extends Controller
             'category_id' => 'required',
             'product_price' => 'required',
             'product_images' => 'required',
-            'model_number'=>'required|unique:products',
-            'color'=>'required'
+            'model_number' => 'required|unique:products',
+            'color' => 'required'
         ]);
 
         $product_images = $request->file('product_images');
@@ -123,7 +124,7 @@ class ProductController extends Controller
         $companies = Company::all();
         $categories = Category::all();
         $product_id = $id ?? 0;
-        return view('admin.products.edit_product', compact('model_number','color','quantity','product_id', 'activePage', 'companies', 'categories', 'product', 'name', 'selectedcompany', 'selectedcategory', 'price', 'images'));
+        return view('admin.products.edit_product', compact('model_number', 'color', 'quantity', 'product_id', 'activePage', 'companies', 'categories', 'product', 'name', 'selectedcompany', 'selectedcategory', 'price', 'images'));
     }
 
     public function create_company(Request $request)
@@ -179,8 +180,8 @@ class ProductController extends Controller
                 'company_id' => 'required',
                 'category_id' => 'required',
                 'product_price' => 'required',
-                'model_number'=>'required',
-                'color'=>'required'
+                'model_number' => 'required',
+                'color' => 'required'
             ]);
 
             $oldImages = $product->images ?? '';
@@ -193,9 +194,9 @@ class ProductController extends Controller
             $product_category = $request->input('category_id') ?? 0;
             $product_price = $request->input('product_price') ?? 0;
             $model_number = $request->input('model_number') ?? 0;
-        $product_color = $request->input('color');
-        $product_quantity = $request->input('quantity');
-        $sku = Str::slug($product_name);
+            $product_color = $request->input('color');
+            $product_quantity = $request->input('quantity');
+            $sku = Str::slug($product_name);
 
             $imagePaths = [];
             $image_cnt = 0;
@@ -367,54 +368,9 @@ class ProductController extends Controller
     {
         $productsData = $request->productsData;
 
-        foreach ($productsData as $product) {
-            $checkProduct = Product::where('product_name', $product[0])->orWhere('model_number',$product[5])->exists();
-            if ($checkProduct) {
-                return;
-            }
-            $input = [
-                'product_name' => $product[0],
-                'product_price' => $product[3],
-                'images' => "",
-                'image_count' => 0,
-                'quantity' => $product[4],
-                'model_number'=>$product[5],
-                'color'=>$product[6]
-            ];
-            $sku = Str::slug($product[0]);
-            $input['sku']=$sku;
+        ProcessProducts::dispatch($productsData);
 
-            // Handle company
-            $company = $product[1];
-            $checkCompany = Company::where('company_name', $company)->first();
-            if ($checkCompany) {
-                $input['company_id'] = $checkCompany->id;
-            } else {
-                $addCompany = Company::create(['company_name' => $company]);
-                $input['company_id'] = $addCompany->id;
-            }
-
-            // Handle category
-            $category = $product[2];
-            $checkCategory = Category::where('category_name', $category)->first();
-            if ($checkCategory) {
-                $input['category_id'] = $checkCategory->id;
-            } else {
-                $addCategory = Category::create(['category_name' => $category]);
-                $input['category_id'] = $addCategory->id;
-            }
-
-            // Debugging: ensure $input contains the required fields
-            if (!isset($input['company_id']) || !isset($input['category_id'])) {
-                return back()->with('error', 'Company or Category ID missing');
-            }
-
-
-            // Ensure the Product model has 'company_id' and 'category_id' in its $fillable property
-            Product::create($input);
-        }
-
-        return back()->with('success', 'Products added successfully!');
+        return back()->with('success', 'Products are being processed!');
     }
 
     public function check_product(Request $request)
@@ -422,7 +378,7 @@ class ProductController extends Controller
         $product_name = $request->name ?? '';
         $model_number = $request->model_number ?? '';
 
-        $checkProduct = Product::where('product_name', $product_name)->orWhere('model_number',$model_number)->exists();
+        $checkProduct = Product::where('product_name', $product_name)->orWhere('model_number', $model_number)->exists();
         return response()->json(['exists' => $checkProduct]);
     }
 
@@ -437,10 +393,11 @@ class ProductController extends Controller
         return response()->download($file);
     }
 
-    public function fav_product_page(Request $request){
+    public function fav_product_page(Request $request)
+    {
         $activePage = 'products';
         $user_id = auth()->user()->id;
-        $products = Product::join('favourites','products.id','=','favourites.product_id')->whereRaw("FIND_IN_SET(?, favourites.user_id)", [$user_id])->select('products.id as pid','products.*','favourites.*')->paginate(10);
+        $products = Product::join('favourites', 'products.id', '=', 'favourites.product_id')->whereRaw("FIND_IN_SET(?, favourites.user_id)", [$user_id])->select('products.id as pid', 'products.*', 'favourites.*')->paginate(10);
         $TotalProducts = Product::count();
         $TotalCompanies = Company::count();
         return view('users.products.fav_product', compact('activePage', 'products', 'TotalProducts', 'TotalCompanies'));
