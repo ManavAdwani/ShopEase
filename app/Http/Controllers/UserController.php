@@ -16,8 +16,9 @@ class UserController extends Controller
 {
     public function login_page(Request $request)
     {
+        // dd($request->cookie('guest_user_token'));
         $userToken = $request->cookie('guest_user_token');
-
+        // dd($userToken);
         if ($userToken) {
             $lastMonth = Carbon::now()->subMonth();
             $newLaunched = Product::where('created_at', '>=', $lastMonth)->get();
@@ -92,7 +93,7 @@ class UserController extends Controller
 
         if (!Auth::check()) {
             $userToken = $request->cookie('guest_user_token');
-
+            // dd($userToken);
             if ($userToken) {
                 // Find the user by token
                 $user = User::where('temporary', true)->where('guest_token', $userToken)->first();
@@ -101,15 +102,15 @@ class UserController extends Controller
                     // Create a new temporary user if token is invalid
                     $user = $this->createTemporaryUser();
                 }
+                Cookie::queue('guest_user_token', $userToken, 60 * 24 * 7); // 1 week
+                Auth::login($user);
             } else {
                 // Create a new temporary user if no token
                 $user = $this->createTemporaryUser();
+                // dd($user);
+                Cookie::queue('guest_user_token', $user->guest_token, 60 * 24 * 7); // 1 week
+                Auth::login($user);
             }
-
-            // Set a cookie with the user's token
-            Cookie::queue('guest_user_token', $userToken, 60 * 24 * 7); // 1 week
-
-            Auth::login($user);
         } else {
             $user = Auth::user();
         }
@@ -130,11 +131,6 @@ class UserController extends Controller
             'role' => 3,
             'phone' => $phone,
         ]);
-
-        if ($user) {
-            Cookie::queue('guest_user_token', $userToken, 60 * 24 * 7); // 1 week
-            return redirect('/homepage')->with('user', $user);
-        }
 
         return $user;
     }
