@@ -25,6 +25,8 @@ class User extends Authenticatable
         'profile',
         'phone',
         'password',
+        'temporary',
+        'guest_token'
     ];
 
     /**

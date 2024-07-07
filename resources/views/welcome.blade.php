@@ -37,6 +37,13 @@
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 <h2 class="text-center text-dark mt-5">Login Form</h2>
+                @if (Session::get('error'))
+                <div>
+                    <div class="alert alert-danger" role="alert">
+                        {{ Session::get('error') }}
+                      </div>
+                </div>
+                @endif
                 <div class="card my-5">
 
                     <form method="POST" action="{{route('users.login')}}" class="card-body cardbody-color p-lg-5">
@@ -48,17 +55,17 @@
                         </div>
 
                         <div class="mb-3">
-                            <input type="email" class="form-control" id="Email" name="email" aria-describedby="emailHelp"
-                                placeholder="Email">
+                            <input type="email" class="form-control" id="Email" name="email"
+                                aria-describedby="emailHelp" placeholder="Email">
                         </div>
                         <div class="mb-3">
-                            <input type="password" class="form-control" id="password" name="password" placeholder="password">
+                            <input type="password" class="form-control" id="password" name="password"
+                                placeholder="password">
                         </div>
                         <div class="text-center"><button type="submit"
                                 class="btn btn-color px-5 mb-5 w-100">Login</button></div>
-                        <div id="emailHelp" class="form-text text-center mb-5 text-dark">Not
-                            Registered? <a href="#" class="text-dark fw-bold"> Create an
-                                Account</a>
+                        <div id="emailHelp" class="form-text text-center mb-5 text-dark">Login
+                            as a <a href="{{route('users.guest_login')}}" class="text-dark fw-bold">Guest</a>
                         </div>
                     </form>
                 </div>

@@ -19,14 +19,17 @@ use App\Models\Product;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/',[UserController::class,'login_page'])->name('users.login_page');
 
 Route::post('/login', [UserController::class, 'login'])->name('users.login');
 Route::post('logout', [UserController::class, 'logout'])->name('users.logout');
 Route::get('settings',[AdminController::class,'settings'])->name('users.settings');
 Route::post('setting-update',[AdminController::class,'setting_update'])->name('admin.setting_update');
+Route::get('guest-login',[UserController::class,'guest_login'])->name('users.guest_login');
 
 #Admin Routes
 Route::get('admin-dashboard',[AdminController::class,'dashboard'])->name('admin.dashboard');
