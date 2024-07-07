@@ -90,8 +90,14 @@
                         $getCompanyName = DB::table('companies')->where('id',$product->company_id)->select()->first();
                         $company_name = $getCompanyName->company_name ?? 'N/A';
                         @endphp
+                        
                         <p class="card-text mt-2" style="margin-bottom:10px;color:gray;font-size:17px">{{$company_name}}
                         </p>
+                        @if(auth()->user()->role != 3)
+                        <p class="card-text" @if ($product->quantity == 0)
+                            style="color:red"
+                        @endif><b>Quantity - {{$product->quantity}}</b></p>
+                        @endif
                         <h5 class="card-text mt-4">₹{{$product->product_price}}</h5>
                         <div class="allBtns" style="display: flex; flex-wrap:wrap">
                             <div>
