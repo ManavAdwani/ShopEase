@@ -82,7 +82,8 @@
             <div data-mdb-input-init class="form-outline mb-4">
                 <label class="form-label" for="form6Example3">Category name</label>
                 <div class="cat" style="display: flex">
-                    <select class="form-select" name="category_id" aria-label="Default select example" id="addCategorySelect">
+                    <select class="form-select" name="category_id" aria-label="Default select example"
+                        id="addCategorySelect">
                         <option selected>Select category name</option>
                         @foreach ($categories as $category)
                         <option value="{{$category->id}}">{{$category->category_name}}</option>
@@ -99,8 +100,7 @@
                 <div class="col">
                     <div data-mdb-input-init class="form-outline">
                         <label class="form-label" for="form6Example1">Color</label>
-                        <input type="text" name="color" placeholder="Color" id="form6Example1"
-                            class="form-control" />
+                        <input type="text" name="color" placeholder="Color" id="form6Example1" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -163,6 +163,9 @@
                         @csrf
                         <label for="">Category Name</label>
                         <input type="text" name="category_name" id="" class="form-control mt-2"
+                            placeholder="Category Name" required>
+                        <label for="">Category Logo</label>
+                        <input type="file" name="category_logo" id="" class="form-control mt-2"
                             placeholder="Category Name" required>
                     </form>
                 </div>
