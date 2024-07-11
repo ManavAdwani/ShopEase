@@ -60,8 +60,9 @@ class UserController extends Controller
     public function user_homepage()
     {
         $lastMonth = Carbon::now()->subMonth();
+        $allCategories = Category::all();
         $newLaunched = Product::where('created_at', '>=', $lastMonth)->paginate(5);
-        return view('users.homepage', compact('newLaunched'));
+        return view('users.homepage', compact('newLaunched','allCategories'));
     }
 
 

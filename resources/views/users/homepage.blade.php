@@ -43,6 +43,27 @@
             style="height: 100%; width:100%">
     </div>
 
+    <div class="container">
+        <div class="row mt-5">
+            <div class="maintitle" style="display: flex; justify-content:space-between">
+                <div class="usertitle">
+                    <h1>Categories</h1>
+                </div>
+    
+            </div>
+            <div class="scroll-container" style="display: flex; overflow:scroll;">
+            @foreach ($allCategories as $category)
+                <div class="col-sm-2 text-center mt-4" style="padding:20px">
+                    <div class="category-item">
+                        <img src="{{ $category->logo ?? 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAMFBMVEXh6vH////5+vrl7fPv8/f0+fzt9Pbf6vD+/f/j6/Lf6vL///3f6fLr8fbv8/by9vm0HxD7AAACbUlEQVR4nO3c65abIBRAYVHTDALx/d+2VBuDII6zLHro2t/fmEn2HETn2jQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADkG29irNHa4I9G9+qu83B2BTauu01JIIYUUUkghhbcX/ipFTGH3LKOTUmi6Qq/QGQrLovA8Ckuj8LzqC/98A2ZX5YXd2Lajf6beOaTmwm5+tnnsBNZc+NTt/OaNanWT/U5hzYWjWjzyh1VSqK1ONpTPW/fyz66kcHCqixJtHwSqPvvUKgq1D/Rjik61MZzhWPd5aJ3fTfwR6yn+P4XzBFU8RevCwvzPJCoo9IFmepdmPUUdFuqaZzgt0fcUw8T+88Ar/wrSC/UywemgcKE+7Tg/ZNRY8V2bDScYT9G6r+mdu+fOK8guXE8wmaK/Vet6980PPmUXDvEEVXLRCL942lwGkguny0RSmF76//ILuh/SE1JyYXIObk/xzfn17NJH5BZ+LvSHpmjno10yRbmFySYTDHFjivONnZ9iHC+3MLNE31NcJy7zNsn9m9DC9DIRTXG9UD977jTF1UIVWpjbZDJTDM/YeLsRWfjdBKMprj8d8RRFFm5d6Dca31OM99z1diOwMHehT01TTBe0WV00BBYem+AyRbdxcDhFgYX6YN80RZu5LTCSZ9gcLzSqz+xIZvloAgt/MsN8u+QZUkghhRRSSCGFFFJIIYWXFKqv85Towr3fcDpKSy78xygsjcLzKCyNwvPEFCpthxKsVlIKXVeGE1NYHoUUUkghhRRSeFfh2D6u0o53BOpmuOz/RA17f8MHAAAAAAAAAAAAAAAAAAAAAAAAAAAAALjcb3yLQG5tF3tgAAAAAElFTkSuQmCC' }}" alt="{{ $category->category_name }}" class="rounded-circle" width="100" height="100">
+                        <p>{{ $category->category_name }}</p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        </div>
+    </div>
+
     <div class="container mt-5">
         <div class="maintitle" style="display: flex; justify-content:space-between">
             <div class="usertitle">
@@ -54,9 +75,9 @@
 
         </div>
         <div class="row mb-5">
-            <div class="scroll-container" style="display: flex; overflow:scroll">
+            <div class="scroll-container" style="display: flex; overflow:scroll;">
                 @foreach ($newLaunched as $product)
-                <div class="col-sm-3 mt-3">
+                <div class="col-sm-3 mt-3" style="padding:20px;">
                     <div class="card" style="width: 15rem; box-shadow: 10px 10px;">
                         @php
                         $images = explode(',',$product->images);
