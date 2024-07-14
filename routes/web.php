@@ -53,6 +53,8 @@ Route::get('delete-product/{id}',[ProductController::class,'delete'])->name('adm
 ROute::get('edit-product/{id}',[ProductController::class,'edit'])->name('admin.edit_product');
 Route::post('create-company',[ProductController::class,'create_company'])->name('admin.create_company');
 Route::post('create-category',[ProductController::class,'create_category'])->name('admin.create_category');
+Route::post('edit-category',[ProductController::class,'edit_category'])->name('admin.edit_category');
+Route::post('update-category',[ProductController::class,'update_category'])->name('admin.update_category');
 Route::get('delete-images/{id}/{image}',[ProductController::class,'delete_images'])->name('admin.delete_images');
 Route::post('update-product/{id}',[ProductController::class,'update_product'])->name('admin.update_product');
 Route::get('orders',[OrdersController::class,'orders'])->name('admin.orders');

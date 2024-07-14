@@ -171,6 +171,49 @@ class ProductController extends Controller
         ]);
     }
 
+    public function edit_category(Request $request){
+        $category_id = $request->category_id ?? 0;
+        $category = Category::findOrFail($category_id);
+        if($category){
+            return response()->json([
+                'id' => $category->id,
+                'category_logo'=>$category->logo,
+                'category_name' => $category->category_name ?? '',
+            ]);
+        }
+    }
+
+    public function update_category(Request $request){
+        $cat_image = $request->file('category_logo');
+        $category_name = $request->get('category_name') ?? '';
+        $category_id = $request->get('category_id') ?? 0;
+        $category = Category::findOrFail($category_id);
+        $category->company_id = 0;
+        $category->category_name = $category_name;
+        $imagePaths = "";
+        $destinationPath = public_path('uploads/category');
+
+        // Ensure the directory exists
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+
+        // Save the file
+        $filename = $cat_image->getClientOriginalName(); // Or generate a unique name
+        $cat_image->move($destinationPath, $filename);
+
+        // Create the relative path to store in the database or use later
+        $relativePath = 'uploads/category/' . $filename;
+        $imagePaths = $relativePath;
+        // 
+        $category->logo = $imagePaths;
+        $category->save();
+        return response()->json([
+            'id' => $category->id,
+            'category_name' => $category->category_name,
+        ]);
+    }
+
     public function delete_images($id, $imagePath)
     {
         $ogImage = Crypt::decrypt($imagePath);
