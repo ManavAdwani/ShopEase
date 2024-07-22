@@ -171,19 +171,21 @@ class ProductController extends Controller
         ]);
     }
 
-    public function edit_category(Request $request){
+    public function edit_category(Request $request)
+    {
         $category_id = $request->category_id ?? 0;
         $category = Category::findOrFail($category_id);
-        if($category){
+        if ($category) {
             return response()->json([
                 'id' => $category->id,
-                'category_logo'=>$category->logo,
+                'category_logo' => $category->logo,
                 'category_name' => $category->category_name ?? '',
             ]);
         }
     }
 
-    public function update_category(Request $request){
+    public function update_category(Request $request)
+    {
         $cat_image = $request->file('category_logo');
         $category_name = $request->get('category_name') ?? '';
         $category_id = $request->get('category_id') ?? 0;
@@ -312,32 +314,51 @@ class ProductController extends Controller
     // USER SIDE
     public function user_products(Request $request)
     {
-        $selectedcat = $request->get('category') ?? 0;
-        $selectedcom = $request->get('company') ?? 0;
-        $searched = $request->get('search') ?? '';
+        // dd($request->cat_id);
+        $category_id = $request->cat_id ?? 0;
+        if ($category_id != 0) {
+            $selectedcat = $category_id;
+            $selectedcom = $request->get('company') ?? 0;
+            $searched = $request->get('search') ?? '';
+            $categories = Category::all();
+            $companies = Company::all();
+            $query = Product::where('category_id', $category_id);
 
-        // Fetch all categories and companies
-        $categories = Category::all();
-        $companies = Company::all();
+            if ($request->get('search')) {
+                $query->where('product_name', 'LIKE', '%' . $request->get('search') . '%');
+            }
 
-        // Initialize the query builder for products
-        $query = Product::query();
+            // Paginate the results
+            $products = $query->paginate(20);
+        } else {
+            $selectedcat = $request->get('category') ?? 0;
+            $selectedcom = $request->get('company') ?? 0;
+            $searched = $request->get('search') ?? '';
 
-        // Apply category filter if present
-        if ($request->get('category')) {
-            $query->where('category_id', $request->get('category'));
+            // Fetch all categories and companies
+            $categories = Category::all();
+            $companies = Company::all();
+
+            // Initialize the query builder for products
+            $query = Product::query();
+
+            // Apply category filter if present
+            if ($request->get('category')) {
+                $query->where('category_id', $request->get('category'));
+            }
+
+            if ($request->get('company')) {
+                $query->where('company_id', $request->get('company'));
+            }
+
+            if ($request->get('search')) {
+                $query->where('product_name', 'LIKE', '%' . $request->get('search') . '%');
+            }
+
+            // Paginate the results
+            $products = $query->paginate(20);
         }
 
-        if ($request->get('company')) {
-            $query->where('company_id', $request->get('company'));
-        }
-
-        if ($request->get('search')) {
-            $query->where('product_name', 'LIKE', '%' . $request->get('search') . '%');
-        }
-
-        // Paginate the results
-        $products = $query->paginate(20);
 
         // Return the view with the fetched data
         return view('users.products.index', compact('searched', 'categories', 'companies', 'selectedcom', 'products', 'selectedcat'));
