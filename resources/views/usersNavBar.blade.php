@@ -56,7 +56,7 @@
                                 shopping_cart
                             </span>
                             @php
-                            $cartCount = DB::table('carts')->where('user_id',auth()->user()->id)->where('status','pending')->count();
+                            $cartCount = DB::table('carts')->where('user_id',auth()->user()->id ?? 0)->where('status','pending')->count();
                             @endphp
                             @if($cartCount == 0)
                             Cart
@@ -80,6 +80,17 @@
                             </span>
                             Profile
                         </a>
+                    </li>
+                    <li class="nav-item">
+                        <a onclick="event.preventDefault(); document.getElementById('frm-logout').submit();" class="nav-link active d-flex align-items-center" aria-current="page" href="{{route('users.logout')}}">
+                            <span class="material-symbols-outlined me-2">
+                                logout
+                            </span>
+                            Logout
+                        </a>
+                        <form id="frm-logout" action="{{ route('users.logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
                     </li>
                 </ul>
             </div>

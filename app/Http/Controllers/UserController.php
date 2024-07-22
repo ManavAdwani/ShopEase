@@ -68,10 +68,18 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
+        $userToken = $request->cookie('guest_user_token');
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+        
+        $response = redirect('/');
+        
+        if (!empty($userToken)) {
+            $response->withCookie(Cookie::forget('guest_user_token'));
+        }
+        
+        return $response;
     }
 
     public function check_email(Request $request)
