@@ -21,8 +21,9 @@ class UserController extends Controller
         // dd($userToken);
         if ($userToken) {
             $lastMonth = Carbon::now()->subMonth();
+            $allCategories = Category::all();
             $newLaunched = Product::where('created_at', '>=', $lastMonth)->get();
-            return view('users.homepage', compact('newLaunched'));
+            return view('users.homepage', compact('newLaunched','allCategories'));
         } else {
             return view('welcome');
         }

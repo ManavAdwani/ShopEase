@@ -485,4 +485,10 @@ class ProductController extends Controller
         $TotalCompanies = Company::count();
         return view('users.products.fav_product', compact('activePage', 'products', 'TotalProducts', 'TotalCompanies'));
     }
+
+    public function getProductData(Request $request){
+        $pid = $request->product_id ?? 0;
+        $productData = Product::join('companies','companies.id','=','products.company_id')->join('categories','categories.id','=','products.category_id')->where('products.id',$pid)->select('products.*','companies.company_name as company','categories.category_name as category')->get();
+        return response()->json(['productData' => $productData]);
+    }
 }

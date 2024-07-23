@@ -29,18 +29,17 @@ function addFavoriteProduct(product_ids) {
                         Swal.fire({
                             title: "Favorite",
                             text: "Product added in favorites!",
-                            icon: "success"
-                          });
+                            icon: "success",
+                        });
                     } else {
                         unFilledHeart.style.display = "block";
                         filledHeart.style.display = "none";
                         Swal.fire({
                             title: "Favorite",
                             text: "Product removed from favorites!",
-                            icon: "success"
-                          });
+                            icon: "success",
+                        });
                     }
-                    
                 } else {
                     console.error(
                         "Elements not found: unFilled_heart_" +
@@ -60,10 +59,10 @@ function addFavoriteProduct(product_ids) {
 
 function addToCart(product_id) {
     var pid = product_id;
-    var atc = document.getElementById("addToCart"+pid);
-    var pro_quan = document.getElementById("pro_quan"+pid);
-    var addBtn = document.getElementById("addBtn"+pid);
-    var cancelBtn = document.getElementById("cancelBtn"+pid);
+    var atc = document.getElementById("addToCart" + pid);
+    var pro_quan = document.getElementById("pro_quan" + pid);
+    var addBtn = document.getElementById("addBtn" + pid);
+    var cancelBtn = document.getElementById("cancelBtn" + pid);
 
     atc.style.display = "none";
     pro_quan.style.display = "inline";
@@ -77,10 +76,10 @@ function addToCart(product_id) {
 
 function cancelCartButton(product_id) {
     var pid = product_id;
-    var atc = document.getElementById("addToCart"+pid);
-    var pro_quan = document.getElementById("pro_quan"+pid);
-    var addBtn = document.getElementById("addBtn"+pid);
-    var cancelBtn = document.getElementById("cancelBtn"+pid);
+    var atc = document.getElementById("addToCart" + pid);
+    var pro_quan = document.getElementById("pro_quan" + pid);
+    var addBtn = document.getElementById("addBtn" + pid);
+    var cancelBtn = document.getElementById("cancelBtn" + pid);
     // Add blur event listener to pro_quan
     cancelBtn.addEventListener("click", function () {
         pro_quan.style.display = "none";
@@ -92,8 +91,8 @@ function cancelCartButton(product_id) {
 
 function addToCartButton(product_id) {
     var pid = product_id;
-    var pro_quan = document.getElementById("pro_quan"+pid).value;
-    var user_id = document.getElementById('user_id').value;
+    var pro_quan = document.getElementById("pro_quan" + pid).value;
+    var user_id = document.getElementById("user_id").value;
 
     $.ajax({
         url: addToCart_route, // URL to your controller
@@ -104,20 +103,20 @@ function addToCartButton(product_id) {
         data: {
             product_id: pid,
             user_id: user_id,
-            pro_quan: pro_quan
+            pro_quan: pro_quan,
         },
         success: function (response) {
-            if (response.status === 'success') {
+            if (response.status === "success") {
                 Swal.fire({
                     title: "Product added to your cart!",
                     text: response.data + " added successfully to your cart!",
-                    icon: "success"
+                    icon: "success",
                 });
             } else {
                 Swal.fire({
                     title: "Error!",
                     text: response.message,
-                    icon: "error"
+                    icon: "error",
                 });
             }
         },
@@ -125,9 +124,110 @@ function addToCartButton(product_id) {
             Swal.fire({
                 title: "Error!",
                 text: "Something went wrong. Please try again later.",
-                icon: "error"
+                icon: "error",
             });
         },
     });
 }
 
+function getProductData(product_id) {
+    var pid = product_id;
+    // users.productData
+    $.ajax({
+        url: ProductData, // URL to your controller
+        type: "POST",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        data: {
+            product_id: pid,
+        },
+        success: function (response) {
+            if (response) {
+                // Get the first product from the response array
+                const product = response.productData[0];
+
+                // Update modal content
+                document.getElementById("modalLabel").textContent =
+                    "Product details";
+
+                // Handle comma-separated image URLs
+                const images = product.images.split(","); // Split the image URLs by comma
+                const imageContainer = document.getElementById("modalImages");
+
+                // Clear previous images
+                imageContainer.innerHTML = "";
+
+                const placeholderImageUrl = "https://www.incathlab.com/images/products/default_product.png";
+
+                // Add images to the modal
+                images.forEach((imageUrl) => {
+                    let imageUrls =  imageUrl.trim();
+                    const imgElement = document.createElement("img");
+                    imgElement.alt = "Product Image";
+                    imgElement.style.width = "30%"; // Adjust size as needed
+                    imgElement.style.maxWidth = "300px"; // Adjust size as needed
+                    imgElement.style.marginBottom = "10px"; // Space between images
+
+                    imgElement.src = imageUrls;
+
+                    imgElement.onerror = () => {
+                        imgElement.src = placeholderImageUrl;
+                    };
+
+                    imageContainer.appendChild(imgElement);
+                });
+                var product_price = "₹" + product.product_price;
+                document.getElementById("productName").innerHTML =
+                    product.product_name;
+                document.getElementById("productCom").innerHTML =
+                    product.company;
+                document.getElementById("productCat").innerHTML =
+                    product.category;
+                document.getElementById("productPrice").innerHTML =
+                    product_price;
+
+                const productQuantityElement =
+                    document.getElementById("productQuan");
+
+                // Set the quantity
+                productQuantityElement.innerHTML = product.quantity;
+
+                // Apply red color if the quantity is 0
+                if (product.quantity === 0) {
+                    productQuantityElement.style.color = "red";
+                } else {
+                    productQuantityElement.style.color = ""; // Reset color if not 0
+                }
+
+                // Show the modal
+                var myModal = new bootstrap.Modal(
+                    document.getElementById("productModal")
+                );
+                myModal.show();
+            } else {
+                // Update modal content for error
+                document.getElementById("modalLabel").textContent = "Error!";
+                document.getElementById("modalMessage").textContent = response
+                    ? response.message
+                    : "Unknown error";
+
+                // Clear previous images
+                document.getElementById("modalImages").innerHTML = "";
+
+                // Show the modal
+                var myModal = new bootstrap.Modal(
+                    document.getElementById("productModal")
+                );
+                myModal.show();
+            }
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: "Error!",
+                text: "Something went wrong. Please try again later.",
+                icon: "error",
+            });
+        },
+    });
+}

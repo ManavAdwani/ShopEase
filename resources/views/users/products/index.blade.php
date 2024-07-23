@@ -60,7 +60,8 @@
         <div class="row mb-5">
             @foreach ($products as $product)
             <div class="col-sm-3 mt-3 d-flex justify-content-center">
-                <div class="card" style="width: 15rem; box-shadow: 10px 10px;">
+                <div onclick="getProductData({{$product->id}})" class="card"
+                    style="width: 15rem; box-shadow: 10px 10px;">
                     @php
                     $images = explode(',',$product->images);
                     // print_r($images);
@@ -90,13 +91,13 @@
                         $getCompanyName = DB::table('companies')->where('id',$product->company_id)->select()->first();
                         $company_name = $getCompanyName->company_name ?? 'N/A';
                         @endphp
-                        
+
                         <p class="card-text mt-2" style="margin-bottom:10px;color:gray;font-size:17px">{{$company_name}}
                         </p>
                         @if(auth()->user()->role != 3)
                         <p class="card-text" @if ($product->quantity == 0)
                             style="color:red"
-                        @endif><b>Quantity - {{$product->quantity}}</b></p>
+                            @endif><b>Quantity - {{$product->quantity}}</b></p>
                         @endif
                         <h5 class="card-text mt-4">₹{{$product->product_price}}</h5>
                         <div class="allBtns" style="display: flex; flex-wrap:wrap">
@@ -159,6 +160,29 @@
 
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="modalImages"></div> <!-- Container for images -->
+                    <p>Product Name : <span style="font-weight: 600" id="productName"></span></p>
+                    <p>Company : <span id="productCom" style="font-weight: 600"></span></p>
+                    <p>Category : <span id="productCat" style="font-weight: 600"></span></p>
+                    <p>Quantity : <span id="productQuan" style="font-weight: 600"></span></p>
+                    <p>Price : <span id="productPrice" style="font-weight: 600"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
     <script src="{{asset('js/user_product.js')}}"></script>
@@ -170,6 +194,7 @@
         var fav_pro_route = '{{route('users.fav_pro')}}';
         var csrf = '{{ csrf_token() }}';
         var addToCart_route = '{{route('users.add_to_cart')}}';
+        var ProductData = '{{route('users.productData')}}';
         // alert(csrf);
     </script>
 </body>

@@ -83,3 +83,4 @@ Route::post('add-address',[CartController::class,'store_address'])->name('users.
 Route::get('/get-city-state', [CartController::class, 'getCityState']);
 Route::get('thank-you',[CartController::class,'thankyou'])->name('users.thankyou');
 Route::get('save-order-old-address/{id}',[CartController::class,'save_order_old'])->name('users.save_address_order');
+Route::post('getProductData',[ProductController::class,'getProductData'])->name('users.productData');
