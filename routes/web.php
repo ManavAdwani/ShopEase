@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserBannerController;
 use App\Models\Product;
 
 /*
@@ -68,6 +69,10 @@ Route::post('check_email',[UserController::class,'check_email'])->name('admin.ch
 Route::post('check_phone',[UserController::class,'check_phone'])->name('admin.check_phone');
 Route::get('download_csv',[AdminController::class,'download_users_csv'])->name('admin.download_users_csv');
 Route::get('download_product_csv',[ProductController::class,'download_users_csv'])->name('admin.product_csv_download');
+Route::get('user-banners',[UserBannerController::class,'index'])->name('admin.user_banner');
+Route::get('create-user-banner',[UserBannerController::class,'create'])->name('admin.create_user_banner');
+Route::post('store-user-banner',[UserBannerController::class,'store'])->name('admin.store_user_banner');
+Route::get('change-banner-status/{id}',[UserBannerController::class,'change_status'])->name('admin.change_banner_status');
 
 #Users Route
 // Route::get('users-nav',[UserController::class,'navbar'])->name('users.navbar');

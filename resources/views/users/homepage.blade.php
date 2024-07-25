@@ -8,12 +8,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{asset('css/usersNav.css')}}">
+    {{-- <link rel="stylesheet" href="{{asset('css/usersNav.css')}}"> --}}
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://kit.fontawesome.com/a4c00a89bc.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
 </head>
 <style>
     .scroll-container {
@@ -39,9 +40,22 @@
     @include('usersNavBar');
 
     <div class="container">
-        <img src="{{asset('herobanner/PRIME_SERIES_PC.jpg')}}" alt="Image de naruto usada de fondo"
-            style="height: 100%; width:100%">
+        <!-- Flickity HTML init -->
+            @php
+                $getBanners = DB::table('banners')->where('status',1)->get();
+            @endphp
+            @if($getBanners->isNotEmpty())
+        <div class="carousel" data-flickity='{ "freeScroll": true }'>
+            @foreach ($getBanners as $banners)
+            <div class="carousel-cell">
+                <img src="{{asset('storage/'.$banners->banner)}}" alt="" width="100%">
+            </div>
+            @endforeach
+            @endif
+        </div>
+
     </div>
+
 
     <div class="container">
         <div class="row mt-5">
@@ -49,20 +63,22 @@
                 <div class="usertitle">
                     <h1>Categories</h1>
                 </div>
-    
+
             </div>
             <div class="scroll-container" style="display: flex; overflow:scroll;">
-            @foreach ($allCategories as $category)
+                @foreach ($allCategories as $category)
                 <div class="col-sm-2 text-center mt-4" style="padding:20px">
-                    <a href="{{route('users.products',['cat_id'=>$category->id])}}" style="text-decoration: none;color:black">
-                        <div class="category-item" >
-                            <img src="{{ $category->logo ?? 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAMFBMVEXh6vH////5+vrl7fPv8/f0+fzt9Pbf6vD+/f/j6/Lf6vL///3f6fLr8fbv8/by9vm0HxD7AAACbUlEQVR4nO3c65abIBRAYVHTDALx/d+2VBuDII6zLHro2t/fmEn2HETn2jQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADkG29irNHa4I9G9+qu83B2BTauu01JIIYUUUkghhbcX/ipFTGH3LKOTUmi6Qq/QGQrLovA8Ckuj8LzqC/98A2ZX5YXd2Lajf6beOaTmwm5+tnnsBNZc+NTt/OaNanWT/U5hzYWjWjzyh1VSqK1ONpTPW/fyz66kcHCqixJtHwSqPvvUKgq1D/Rjik61MZzhWPd5aJ3fTfwR6yn+P4XzBFU8RevCwvzPJCoo9IFmepdmPUUdFuqaZzgt0fcUw8T+88Ar/wrSC/UywemgcKE+7Tg/ZNRY8V2bDScYT9G6r+mdu+fOK8guXE8wmaK/Vet6980PPmUXDvEEVXLRCL942lwGkguny0RSmF76//ILuh/SE1JyYXIObk/xzfn17NJH5BZ+LvSHpmjno10yRbmFySYTDHFjivONnZ9iHC+3MLNE31NcJy7zNsn9m9DC9DIRTXG9UD977jTF1UIVWpjbZDJTDM/YeLsRWfjdBKMprj8d8RRFFm5d6Dca31OM99z1diOwMHehT01TTBe0WV00BBYem+AyRbdxcDhFgYX6YN80RZu5LTCSZ9gcLzSqz+xIZvloAgt/MsN8u+QZUkghhRRSSCGFFFJIIYWXFKqv85Towr3fcDpKSy78xygsjcLzKCyNwvPEFCpthxKsVlIKXVeGE1NYHoUUUkghhRRSeFfh2D6u0o53BOpmuOz/RA17f8MHAAAAAAAAAAAAAAAAAAAAAAAAAAAAALjcb3yLQG5tF3tgAAAAAElFTkSuQmCC' }}" alt="{{ $category->category_name }}" class="rounded-circle" width="100" height="100">
+                    <a href="{{route('users.products',['cat_id'=>$category->id])}}"
+                        style="text-decoration: none;color:black">
+                        <div class="category-item">
+                            <img src="{{ $category->logo ?? 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAMFBMVEXh6vH////5+vrl7fPv8/f0+fzt9Pbf6vD+/f/j6/Lf6vL///3f6fLr8fbv8/by9vm0HxD7AAACbUlEQVR4nO3c65abIBRAYVHTDALx/d+2VBuDII6zLHro2t/fmEn2HETn2jQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADkG29irNHa4I9G9+qu83B2BTauu01JIIYUUUkghhbcX/ipFTGH3LKOTUmi6Qq/QGQrLovA8Ckuj8LzqC/98A2ZX5YXd2Lajf6beOaTmwm5+tnnsBNZc+NTt/OaNanWT/U5hzYWjWjzyh1VSqK1ONpTPW/fyz66kcHCqixJtHwSqPvvUKgq1D/Rjik61MZzhWPd5aJ3fTfwR6yn+P4XzBFU8RevCwvzPJCoo9IFmepdmPUUdFuqaZzgt0fcUw8T+88Ar/wrSC/UywemgcKE+7Tg/ZNRY8V2bDScYT9G6r+mdu+fOK8guXE8wmaK/Vet6980PPmUXDvEEVXLRCL942lwGkguny0RSmF76//ILuh/SE1JyYXIObk/xzfn17NJH5BZ+LvSHpmjno10yRbmFySYTDHFjivONnZ9iHC+3MLNE31NcJy7zNsn9m9DC9DIRTXG9UD977jTF1UIVWpjbZDJTDM/YeLsRWfjdBKMprj8d8RRFFm5d6Dca31OM99z1diOwMHehT01TTBe0WV00BBYem+AyRbdxcDhFgYX6YN80RZu5LTCSZ9gcLzSqz+xIZvloAgt/MsN8u+QZUkghhRRSSCGFFFJIIYWXFKqv85Towr3fcDpKSy78xygsjcLzKCyNwvPEFCpthxKsVlIKXVeGE1NYHoUUUkghhRRSeFfh2D6u0o53BOpmuOz/RA17f8MHAAAAAAAAAAAAAAAAAAAAAAAAAAAAALjcb3yLQG5tF3tgAAAAAElFTkSuQmCC' }}"
+                                alt="{{ $category->category_name }}" class="rounded-circle" width="100" height="100">
                             <p>{{ $category->category_name }}</p>
                         </div>
                     </a>
                 </div>
-            @endforeach
-        </div>
+                @endforeach
+            </div>
         </div>
     </div>
 
@@ -116,10 +132,10 @@
                                 {{$company_name}}
                             </p>
                             @if(auth()->user()->role != 3)
-                        <p class="card-text" @if ($product->quantity == 0)
-                            style="color:red"
-                        @endif><b>Quantity - {{$product->quantity}}</b></p>
-                        @endif
+                            <p class="card-text" @if ($product->quantity == 0)
+                                style="color:red"
+                                @endif><b>Quantity - {{$product->quantity}}</b></p>
+                            @endif
                             <h5 class="card-text mt-4">₹{{$product->product_price}}</h5>
                             <div class="allBtns" style="display: flex; flex-wrap:wrap">
                                 <div>
@@ -185,9 +201,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{asset('js/user_product.js')}}"></script>
-     <script>
+    <script>
         var fav_pro_route = '{{route('users.fav_pro')}}';
         var csrf = '{{ csrf_token() }}';
         var addToCart_route = '{{route('users.add_to_cart')}}';
