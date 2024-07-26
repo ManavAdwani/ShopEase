@@ -461,7 +461,7 @@ class ProductController extends Controller
         $product_name = $request->name ?? '';
         $model_number = $request->model_number ?? '';
 
-        $checkProduct = Product::where('product_name', $product_name)->orWhere('model_number', $model_number)->exists();
+        $checkProduct = Product::where('model_number', $model_number)->exists();
         return response()->json(['exists' => $checkProduct]);
     }
 
@@ -488,7 +488,7 @@ class ProductController extends Controller
 
     public function getProductData(Request $request){
         $pid = $request->product_id ?? 0;
-        $productData = Product::join('companies','companies.id','=','products.company_id')->join('categories','categories.id','=','products.category_id')->where('products.id',$pid)->select('products.*','companies.company_name as company','categories.category_name as category')->get();
+        $productData = Product::join('companies','companies.id','=','products.company_id')->join('categories','categories.id','=','products.category_id')->where('products.id',$pid)->select('products.images')->get();
         return response()->json(['productData' => $productData]);
     }
 }

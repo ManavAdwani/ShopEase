@@ -132,7 +132,8 @@ function addToCartButton(product_id) {
 
 function getProductData(product_id) {
     var pid = product_id;
-    // users.productData
+    const defaultImage = "https://www.incathlab.com/images/products/default_product.png";
+
     $.ajax({
         url: ProductData, // URL to your controller
         type: "POST",
@@ -142,87 +143,65 @@ function getProductData(product_id) {
         data: {
             product_id: pid,
         },
-        success: function (response) {
-            if (response) {
-                // Get the first product from the response array
-                const product = response.productData[0];
+        success: function(response) {
+            if (response && response.productData && response.productData.length > 0) {
+                const images = response.productData[0].images.split(',');
+                const carouselWrapper = document.querySelector('.swiper-wrapper');
 
-                // Update modal content
-                document.getElementById("modalLabel").textContent =
-                    "Product details";
-
-                // Handle comma-separated image URLs
-                const images = product.images.split(","); // Split the image URLs by comma
-                const imageContainer = document.getElementById("modalImages");
-
-                // Clear previous images
-                imageContainer.innerHTML = "";
-
-                const placeholderImageUrl = "https://www.incathlab.com/images/products/default_product.png";
-
-                // Add images to the modal
-                images.forEach((imageUrl) => {
-                    let imageUrls =  imageUrl.trim();
-                    const imgElement = document.createElement("img");
-                    imgElement.alt = "Product Image";
-                    imgElement.style.width = "30%"; // Adjust size as needed
-                    imgElement.style.maxWidth = "300px"; // Adjust size as needed
-                    imgElement.style.marginBottom = "10px"; // Space between images
-
-                    imgElement.src = imageUrls;
-
-                    imgElement.onerror = () => {
-                        imgElement.src = placeholderImageUrl;
-                    };
-
-                    imageContainer.appendChild(imgElement);
-                });
-                var product_price = "₹" + product.product_price;
-                document.getElementById("productName").innerHTML =
-                    product.product_name;
-                document.getElementById("productCom").innerHTML =
-                    product.company;
-                document.getElementById("productCat").innerHTML =
-                    product.category;
-                document.getElementById("productPrice").innerHTML =
-                    product_price;
-
-                const productQuantityElement =
-                    document.getElementById("productQuan");
-
-                // Set the quantity
-                productQuantityElement.innerHTML = product.quantity;
-
-                // Apply red color if the quantity is 0
-                if (product.quantity === 0) {
-                    productQuantityElement.style.color = "red";
-                } else {
-                    productQuantityElement.style.color = ""; // Reset color if not 0
+                // Clear existing carousel items
+                while (carouselWrapper.firstChild) {
+                    carouselWrapper.removeChild(carouselWrapper.firstChild);
                 }
 
+                // Add new carousel items
+                images.forEach(image => {
+                    const div = document.createElement('div');
+                    div.className = 'swiper-slide';
+                    const img = document.createElement('img');
+                    img.src = image ? image : defaultImage;
+                    img.style.width = '100%';
+                    div.appendChild(img);
+                    carouselWrapper.appendChild(div);
+                });
+
+                // Initialize Swiper carousel after DOM updates
+                setTimeout(() => {
+                    const swiper = new Swiper('.modalCarousel', {
+                        // Swiper parameters
+                        pagination: {
+                            el: '.swiper-pagination',
+                            clickable: true,
+                        },
+                        navigation: {
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev',
+                        },
+                    });
+                    console.log(swiper); // Log Swiper instance for debugging
+                }, 100); // Delay initialization to ensure DOM is updated
+
                 // Show the modal
-                var myModal = new bootstrap.Modal(
-                    document.getElementById("productModal")
-                );
+                var myModal = new bootstrap.Modal(document.getElementById('productModal'));
                 myModal.show();
             } else {
                 // Update modal content for error
-                document.getElementById("modalLabel").textContent = "Error!";
-                document.getElementById("modalMessage").textContent = response
-                    ? response.message
-                    : "Unknown error";
+                document.getElementById('modalLabel').textContent = "Error!";
+                document.getElementById('modalMessage').textContent = response ? response.message : "Unknown error";
 
                 // Clear previous images
-                document.getElementById("modalImages").innerHTML = "";
+                const carouselWrapper = document.querySelector('.swiper-wrapper');
+                if (carouselWrapper) {
+                    while (carouselWrapper.firstChild) {
+                        carouselWrapper.removeChild(carouselWrapper.firstChild);
+                    }
+                }
 
                 // Show the modal
-                var myModal = new bootstrap.Modal(
-                    document.getElementById("productModal")
-                );
+                var myModal = new bootstrap.Modal(document.getElementById('productModal'));
                 myModal.show();
             }
         },
-        error: function (xhr, status, error) {
+        error: function(xhr, status, error) {
             Swal.fire({
                 title: "Error!",
                 text: "Something went wrong. Please try again later.",
@@ -231,3 +210,4 @@ function getProductData(product_id) {
         },
     });
 }
+
