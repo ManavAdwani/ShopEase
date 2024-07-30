@@ -112,6 +112,7 @@
                             @endif
                         </div>
                         <div class="card-body">
+                            <p style="font-weight: 900">{{$product->model_number}}</p>
                             <p class="card-title"
                                 style="font-size: 20px; max-width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                                 {{$product->product_name}}

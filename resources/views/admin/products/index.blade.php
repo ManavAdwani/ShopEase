@@ -54,6 +54,7 @@
         </div>
     </div>
     <br>
+   
     <div class="container table-responsive py-5">
         <div class="maintitle" style="display: flex; justify-content:space-between">
             <div class="usertitle">
@@ -66,6 +67,7 @@
             
         </div>
         <br><br>
+       
         @if ($errors->any())
         <div>
             <ul>
@@ -83,6 +85,13 @@
             {{ session('success') }}
         </div>
         @endif
+        
+        <form action="{{route('admin.products')}}" method="GET">
+        <div class="container" style="display: flex; gap:20px;flex-wrap:wrap;justify-content:center;">
+            <input value="{{$search}}" type="text" style="width: 60%" name="searchProduct" class="form-control" placeholder="Search product by Product name or model number">
+            <button class="btn btn-primary">Search</button>
+        </div>
+    </form>
         <div class="container" style="display: flex; flex-wrap:wrap; justify-content:space-around;">
             @foreach ($products as $item)
             <div class="card mt-4" style="width: 18rem;">
@@ -107,7 +116,9 @@
             @endif
             
                 <div class="card-body">
+                    <p style="font-weight: 900">{{$item->model_number}}</p>
                   <h5 class="card-title">{{$item->product_name}}</h5>
+                  
                   @php
                       $companydeets = DB::table('companies')->where('id','=',$item->company_id)->select('company_name')->first();
                       $company_name = $companydeets->company_name ?? 'N/A';

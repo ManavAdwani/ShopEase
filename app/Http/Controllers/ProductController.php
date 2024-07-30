@@ -16,13 +16,20 @@ use App\Jobs\ProcessProducts;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->input('searchProduct') ?? '';
         $activePage = 'products';
-        $products = Product::paginate(20);
-        $TotalProducts = Product::count();
         $TotalCompanies = Company::count();
-        return view('admin.products.index', compact('activePage', 'products', 'TotalProducts', 'TotalCompanies'));
+        if($request->input('searchProduct')){
+            $products = Product::where('product_name', 'LIKE', '%' . $request->input('searchProduct') . '%')->orWhere('model_number', 'LIKE', '%' . $request->input('searchProduct') . '%')->paginate(20);
+
+            $TotalProducts = Product::where('product_name', 'LIKE', '%' . $request->get('search') . '%')->orWhere('model_number', 'LIKE', '%' . $request->get('search') . '%')->count();
+        }else{
+            $products = Product::paginate(20);
+        $TotalProducts = Product::count();
+        }
+        return view('admin.products.index', compact('activePage', 'products', 'TotalProducts', 'TotalCompanies','search'));
     }
 
     public function create()
@@ -325,7 +332,7 @@ class ProductController extends Controller
             $query = Product::where('category_id', $category_id);
 
             if ($request->get('search')) {
-                $query->where('product_name', 'LIKE', '%' . $request->get('search') . '%');
+                $query->where('product_name', 'LIKE', '%' . $request->get('search') . '%')->orWhere('model_number','LIKE','%'.$request->get('search').'%');
             }
 
             // Paginate the results
@@ -352,7 +359,7 @@ class ProductController extends Controller
             }
 
             if ($request->get('search')) {
-                $query->where('product_name', 'LIKE', '%' . $request->get('search') . '%');
+                $query->where('product_name', 'LIKE', '%' . $request->get('search') . '%')->orWhere('model_number','LIKE','%'.$request->get('search').'%');
             }
 
             // Paginate the results
@@ -491,4 +498,6 @@ class ProductController extends Controller
         $productData = Product::join('companies','companies.id','=','products.company_id')->join('categories','categories.id','=','products.category_id')->where('products.id',$pid)->select('products.images')->get();
         return response()->json(['productData' => $productData]);
     }
+
+    
 }

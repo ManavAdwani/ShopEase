@@ -71,6 +71,7 @@
                         <img src="{{ $firstImage ? asset($firstImage) : 'https://www.incathlab.com/images/products/default_product.png' }}" class="card-img-top" alt="Product Image" style="width: 100%; height: 100%;">
                     </div>
                     <div class="card-body">
+                        <p style="font-weight: 900">{{$product->model_number}}</p>
                         <p class="card-title" style="font-size: 20px; max-width: 200px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                             {{$product->product_name}}
                         </p>
