@@ -53,7 +53,7 @@
             <div class="fields fields">
                 <label class="field">
                     <span class="field__label" for="firstname">First name</span>
-                    <input class="field__input" type="text" id="firstname" value="{{auth()->user()->name}}" disabled />
+                    <input class="field__input" type="text" id="firstname" name="name" />
                 </label>
             </div>
             <label class="field">

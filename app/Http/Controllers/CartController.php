@@ -8,6 +8,8 @@ use App\Models\UserAddress;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Mail\OrderPlaced;
+use Illuminate\Support\Facades\Mail;
 
 
 class CartController extends Controller
@@ -54,12 +56,14 @@ class CartController extends Controller
         $pincode = $request->input('zipcode') ?? '';
         $city = $request->input('city') ?? '';
         $state = $request->input('state') ?? '';
+        $name = $request->input('name') ?? '';
         $input = [
             'user_id' => $user,
             'address' => $address,
             'zipcode' => $pincode,
             'city' => $city,
             'state' => $state,
+            'cmp_name'=>$name
         ];
         $address = UserAddress::create($input);
 
@@ -72,6 +76,10 @@ class CartController extends Controller
             ->first();
 
         if ($existingOrder) {
+            // $data = array('name'=>"Virat Gandhi");
+           
+
+            // Mail::to('recipient@example.com')->send(new ExampleMail($data));
             // Step 3: If such an order exists, do not create a new order
             return response()->json(['message' => 'Order already exists'], 200);
         }
@@ -100,6 +108,7 @@ class CartController extends Controller
         }
         // dd("HI");
         $storeOrder = Order::create($orderInput);
+        Mail::to('admin@example.com')->send(new OrderPlaced($storeOrder));
 
         
         if (!empty($address->id)) {

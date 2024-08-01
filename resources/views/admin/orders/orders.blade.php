@@ -99,7 +99,7 @@
                     <td>
                         @php
                         $userDetails = DB::table('users')->where('id',$order->user_id)->select('name')->first();
-                        $username =$userDetails->name;
+                        $username =$userDetails->name ?? '';
                         @endphp
                         {{$username}}
                     </td>

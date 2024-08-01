@@ -11,6 +11,11 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use App\Jobs\ProcessProducts;
+use App\Mail\ExampleMail;
+use Illuminate\Support\Facades\Mail;
+// use Illuminate\Mail\Mailer;
+// use Illuminate\Support\Facades\Mail as FacadesMail;
+
 
 
 
@@ -321,6 +326,8 @@ class ProductController extends Controller
     // USER SIDE
     public function user_products(Request $request)
     {
+        
+
         // dd($request->cat_id);
         $category_id = $request->cat_id ?? 0;
         if ($category_id != 0) {

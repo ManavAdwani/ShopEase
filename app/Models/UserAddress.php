@@ -14,6 +14,7 @@ class UserAddress extends Model
         'zipcode',
         'city',
         'state',
-        'user_id'
+        'user_id',
+        'cmp_name'
     ];
 }
