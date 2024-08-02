@@ -15,6 +15,7 @@ class UserAddress extends Model
         'city',
         'state',
         'user_id',
-        'cmp_name'
+        'cmp_name',
+        'phone'
     ];
 }

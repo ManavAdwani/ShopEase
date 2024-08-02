@@ -52,17 +52,21 @@
                 @csrf
             <div class="fields fields">
                 <label class="field">
-                    <span class="field__label" for="firstname">First name</span>
-                    <input class="field__input" type="text" id="firstname" name="name" />
+                    <span class="field__label" for="firstname">Name</span>
+                    <input class="field__input" type="text" id="firstname" placeholder="Enter Name" name="name" required />
                 </label>
             </div>
             <label class="field">
                 <span class="field__label" for="address">Address</span>
-                <input class="field__input" type="text" id="address" placeholder="Address"  name="address" />
+                <input class="field__input" type="text" id="address" placeholder="Address"  name="address" required />
+            </label>
+            <label class="field">
+                <span class="field__label" for="address">Phone number</span>
+                <input class="field__input" type="number" id="number" placeholder="Phone Number"  name="phone" maxlength="10" required />
             </label>
             <label class="field">
                 <span class="field__label" for="country">Country</span>
-                <select class="field__input" id="country" name="country">
+                <select class="field__input" id="country" name="country" required>
                     <option value="">Select Country</option>
                     <option value="india" selected>India</option>
                 </select>
@@ -70,15 +74,15 @@
             <div class="fields fields--3">
                 <label class="field">
                     <span class="field__label" for="zipcode">Zip code</span>
-                    <input class="field__input" placeholder="Pin Code"  type="number" name="zipcode" id="pinCodeInput" />
+                    <input class="field__input" placeholder="Pin Code"  type="number" name="zipcode" id="pinCodeInputs" required/>
                 </label>
                 <label class="field">
                     <span class="field__label" for="city">City</span>
-                    <input class="field__input" placeholder="City"  type="text" name="city" id="city" />
+                    <input class="field__input" placeholder="City"  type="text" name="city" id="city" required/>
                 </label>
                 <label class="field">
                     <span class="field__label" for="state">State</span>
-                    <input class="field__input" placeholder="State" type="text" name="state" id="state" />
+                    <input class="field__input" placeholder="State" type="text" name="state" id="state" required/>
                 </label>
             </div>
             <button type="submit" class="button">Continue</button>
@@ -113,16 +117,23 @@
                             cityField.value = data.city;
                             stateField.value = data.state;
                         } else {
-                            alert('Invalid pin code');
+                            // alert('Invalid pin code');
                         }
                     })
                     .catch(error => {
                         console.error('Error fetching location data:', error);
-                        alert('Failed to fetch location data');
+                        // alert('Failed to fetch location data');
                     });
             });
         });
         </script>
+        <script>
+            document.getElementById('number').addEventListener('input', function () {
+                if (this.value.length > 10) {
+                    this.value = this.value.slice(0, 10);
+                }
+            });
+            </script>
         
         {{-- <input type="text" id="pinCodeInput" placeholder="Enter pin code">
         <input type="text" id="city" placeholder="City" readonly>

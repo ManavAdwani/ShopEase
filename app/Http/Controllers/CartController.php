@@ -57,13 +57,15 @@ class CartController extends Controller
         $city = $request->input('city') ?? '';
         $state = $request->input('state') ?? '';
         $name = $request->input('name') ?? '';
+        $phone = $request->input('phone') ?? '';
         $input = [
             'user_id' => $user,
             'address' => $address,
             'zipcode' => $pincode,
             'city' => $city,
             'state' => $state,
-            'cmp_name'=>$name
+            'cmp_name'=>$name,
+            'phone'=>$phone
         ];
         $address = UserAddress::create($input);
 
