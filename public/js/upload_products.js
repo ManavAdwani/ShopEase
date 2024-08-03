@@ -76,7 +76,7 @@ function displayCSVContent(csvContent) {
 
 
 function validateRow(cells, validatedEmails, validatedPhones, callback) {
-    if (cells.length !== 7) {
+    if (cells.length !== 8) {
         callback("Invalid number of columns");
         return;
     }
@@ -87,7 +87,7 @@ function validateRow(cells, validatedEmails, validatedPhones, callback) {
     var price = cells[3].trim();
     var quantity = cells[4].trim();
     var model_number = cells[5].trim();
-    var color = cells[6].trim()
+    var color = cells[6].trim();
 
     if (!name) {
         callback("Invalid name");
@@ -118,27 +118,28 @@ function validateRow(cells, validatedEmails, validatedPhones, callback) {
         return;
     }
 
-    $.ajax({
-        url: check_product, // URL to your server-side phone validation endpoint
-        type: 'POST',
-        data: JSON.stringify({ name: name,model_number:model_number }),
-        contentType: 'application/json',
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-        success: function(response) {
-            if (response.exists) {
-                callback("Product is added !");
-                checkbox.find("input").prop("checked", false);
-            } else {
-                validatedPhones.add(phone); // Add phone to validated set
-                callback(true); // All validations passed
-            }
-        },
-        error: function(error) {
-            callback("Error validating phone: " + error);
-        }
-    });
+
+    // $.ajax({
+    //     url: check_product, // URL to your server-side phone validation endpoint
+    //     type: 'POST',
+    //     data: JSON.stringify({ name: name,model_number:model_number }),
+    //     contentType: 'application/json',
+    //     headers: {
+    //         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+    //     },
+    //     success: function(response) {
+    //         if (response.exists) {
+    //             callback("Product is added !");
+    //             checkbox.find("input").prop("checked", false);
+    //         } else {
+    //             validatedPhones.add(phone); // Add phone to validated set
+    //             callback(true); // All validations passed
+    //         }
+    //     },
+    //     error: function(error) {
+    //         callback("Error validating phone: " + error);
+    //     }
+    // });
 
     callback(true);
 }

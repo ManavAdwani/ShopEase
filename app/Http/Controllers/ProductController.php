@@ -26,15 +26,15 @@ class ProductController extends Controller
         $search = $request->input('searchProduct') ?? '';
         $activePage = 'products';
         $TotalCompanies = Company::count();
-        if($request->input('searchProduct')){
+        if ($request->input('searchProduct')) {
             $products = Product::where('product_name', 'LIKE', '%' . $request->input('searchProduct') . '%')->orWhere('model_number', 'LIKE', '%' . $request->input('searchProduct') . '%')->paginate(20);
 
             $TotalProducts = Product::where('product_name', 'LIKE', '%' . $request->get('search') . '%')->orWhere('model_number', 'LIKE', '%' . $request->get('search') . '%')->count();
-        }else{
+        } else {
             $products = Product::paginate(20);
-        $TotalProducts = Product::count();
+            $TotalProducts = Product::count();
         }
-        return view('admin.products.index', compact('activePage', 'products', 'TotalProducts', 'TotalCompanies','search'));
+        return view('admin.products.index', compact('activePage', 'products', 'TotalProducts', 'TotalCompanies', 'search'));
     }
 
     public function create()
@@ -326,7 +326,7 @@ class ProductController extends Controller
     // USER SIDE
     public function user_products(Request $request)
     {
-        
+
 
         // dd($request->cat_id);
         $category_id = $request->cat_id ?? 0;
@@ -339,7 +339,7 @@ class ProductController extends Controller
             $query = Product::where('category_id', $category_id);
 
             if ($request->get('search')) {
-                $query->where('product_name', 'LIKE', '%' . $request->get('search') . '%')->orWhere('model_number','LIKE','%'.$request->get('search').'%');
+                $query->where('product_name', 'LIKE', '%' . $request->get('search') . '%')->orWhere('model_number', 'LIKE', '%' . $request->get('search') . '%');
             }
 
             // Paginate the results
@@ -366,7 +366,7 @@ class ProductController extends Controller
             }
 
             if ($request->get('search')) {
-                $query->where('product_name', 'LIKE', '%' . $request->get('search') . '%')->orWhere('model_number','LIKE','%'.$request->get('search').'%');
+                $query->where('product_name', 'LIKE', '%' . $request->get('search') . '%')->orWhere('model_number', 'LIKE', '%' . $request->get('search') . '%');
             }
 
             // Paginate the results
@@ -465,10 +465,55 @@ class ProductController extends Controller
     {
         $productsData = $request->productsData;
 
-        ProcessProducts::dispatch($productsData);
+        foreach ($productsData as $product) {
+            $existingProduct = Product::where('product_name', $product[0])
+                ->orWhere('model_number', $product[5])->first();
 
-        return back()->with('success', 'Products are being processed!');
+            if ($existingProduct) {
+                $existingProduct->quantity = $product[4];
+                $existingProduct->save();
+            } else {
+                $input = $this->prepareProductInput($product);
+                Product::create($input);
+            }
+        }
+
+        return back()->with('success', 'Products added successfully!');
     }
+
+    private function prepareProductInput($product)
+    {
+        $input = [
+            'product_name' => $product[0],
+            'product_price' => $product[3],
+            'images' => "",
+            'image_count' => 0,
+            'quantity' => $product[4],
+            'model_number' => $product[5],
+            'color' => $product[6],
+            'sku' => Str::slug($product[0]),
+            'company_id' => $this->getCompanyId($product[1]),
+            'category_id' => $this->getCategoryId($product[2])
+        ];
+
+        return $input;
+    }
+
+    private function getCompanyId($companyName)
+    {
+        $company = Company::firstOrCreate(['company_name' => $companyName]);
+        return $company->id;
+    }
+
+    private function getCategoryId($categoryName)
+    {
+        $category = Category::firstOrCreate(
+            ['category_name' => $categoryName],
+            ['company_id' => 0]
+        );
+        return $category->id;
+    }
+
 
     public function check_product(Request $request)
     {
@@ -500,11 +545,10 @@ class ProductController extends Controller
         return view('users.products.fav_product', compact('activePage', 'products', 'TotalProducts', 'TotalCompanies'));
     }
 
-    public function getProductData(Request $request){
+    public function getProductData(Request $request)
+    {
         $pid = $request->product_id ?? 0;
-        $productData = Product::join('companies','companies.id','=','products.company_id')->join('categories','categories.id','=','products.category_id')->where('products.id',$pid)->select('products.images')->get();
+        $productData = Product::join('companies', 'companies.id', '=', 'products.company_id')->join('categories', 'categories.id', '=', 'products.category_id')->where('products.id', $pid)->select('products.images')->get();
         return response()->json(['productData' => $productData]);
     }
-
-    
 }
