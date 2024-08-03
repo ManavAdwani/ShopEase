@@ -59,6 +59,7 @@ Route::middleware('auth')->group(function () {
     Route::get('create-user-banner', [UserBannerController::class, 'create'])->name('admin.create_user_banner');
     Route::post('store-user-banner', [UserBannerController::class, 'store'])->name('admin.store_user_banner');
     Route::get('change-banner-status/{id}', [UserBannerController::class, 'change_status'])->name('admin.change_banner_status');
+    Route::get('export-product',[ProductController::class,'export_product'])->name('admin.export_product');
 
     #Users Route
     Route::get('homepage', [UserController::class, 'user_homepage'])->name('users.homepage');

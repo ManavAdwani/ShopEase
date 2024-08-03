@@ -14,6 +14,13 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css">
 </head>
+    <style>
+        .btn .material-symbols-outlined {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 
 <body>
     @include('navbar')
@@ -61,8 +68,15 @@
                 <h3>Products</h3>
             </div>
             <div class="addUser">
-                <a href="{{route('admin.create_product')}}" class="btn btn-sm btn-primary">Add Product</a>
-                <a href="{{route('admin.upload_products')}}" class="btn btn-sm btn-danger">Upload products csv</a>
+                <a title="Add Product" href="{{route('admin.create_product')}}" class="btn btn-sm btn-primary"><span class="material-symbols-outlined">
+                    add
+                    </span></a>
+                <a title="Upload Product" href="{{route('admin.upload_products')}}" class="btn btn-sm btn-danger"><span class="material-symbols-outlined">
+                    upload
+                    </span></a>
+                <a title="Export Product" href="{{route('admin.export_product')}}" class="btn btn-sm btn-success"><span class="material-symbols-outlined">
+                    download
+                    </span></a>
             </div>
             
         </div>

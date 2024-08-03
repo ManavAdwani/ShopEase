@@ -15,7 +15,8 @@ use App\Mail\ExampleMail;
 use Illuminate\Support\Facades\Mail;
 // use Illuminate\Mail\Mailer;
 // use Illuminate\Support\Facades\Mail as FacadesMail;
-
+use App\Exports\ProductsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 
@@ -550,5 +551,9 @@ class ProductController extends Controller
         $pid = $request->product_id ?? 0;
         $productData = Product::join('companies', 'companies.id', '=', 'products.company_id')->join('categories', 'categories.id', '=', 'products.category_id')->where('products.id', $pid)->select('products.images')->get();
         return response()->json(['productData' => $productData]);
+    }
+
+    public function export_product(Request $request){
+        return Excel::download(new ProductsExport, 'products.xlsx');
     }
 }
