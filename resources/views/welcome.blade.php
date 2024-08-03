@@ -36,7 +36,6 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6 offset-md-3">
-                <h2 class="text-center text-dark mt-5">Login Form</h2>
                 @if (Session::get('error'))
                 <div>
                     <div class="alert alert-danger" role="alert">
@@ -48,11 +47,25 @@
 
                     <form method="POST" action="{{route('users.login')}}" class="card-body cardbody-color p-lg-5">
                         @csrf
+                        @php
+                            $setting = DB::table('admin_nav_bar')->select()->first();
+                        @endphp
+                        @if(!empty($setting))
                         <div class="text-center">
-                            <img src="https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295397__340.png"
-                                class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3" width="200px"
-                                alt="profile">
+                            <h2>{{$setting->name}}</h2>
                         </div>
+                            <div class="text-center">
+                                <img src="{{ asset("storage/".$setting->logo) }}"
+                                    class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3" width="200px"
+                                    alt="profile">
+                            </div>
+                        @else
+                            <div class="text-center">
+                                <img src="https://cdn.pixabay.com/photo/2016/03/31/19/56/avatar-1295397__340.png"
+                                    class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3" width="200px"
+                                    alt="profile">
+                            </div>
+                        @endif
 
                         <div class="mb-3">
                             <input type="email" class="form-control" id="Email" name="email"
