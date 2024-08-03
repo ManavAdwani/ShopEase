@@ -49,6 +49,7 @@
                     <th>Total Amt</th>
                     <th>Status</th>
                     <th>Ordered by</th>
+                    <th>Party name</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -104,21 +105,36 @@
                         {{$username}}
                     </td>
                     <td>
-                        <button title="View Order" class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                        @php
+      $getCmpName = DB::table('user_address')->where('id', $order->address)->select('cmp_name')->first();
+      $cmpName = $getCmpName->cmp_name ?? '';
+  @endphp
+  {{ $cmpName ?? 'N/A' }}
+  
+                      </td>
+                    <td>
+                        @if($order->status == "accepted" || $order->status == "rejected")
+                         <button title="View Order" class="btn btn-sm btn-warning" data-bs-toggle="modal"
                             data-bs-target="#viewModal-{{$order->id}}"><i class="fa fa-eye"
                                 style="color: rgb(0, 0, 0);"></i></button>&nbsp;
                         <a href="{{route('admin.edit_order',$order->id)}}" title="Edit Order"
                             class="btn btn-sm btn-primary"><i class="fa fa-edit"
                                 style="color: rgb(255, 255, 255);"></i></a>&nbsp;
-                        @if($order->status != "accepted")
-                        <a href="{{route('admin.accept_order',$order->id)}}" title="Accept Order"
+                            @else
+                             <button title="View Order" class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                            data-bs-target="#viewModal-{{$order->id}}"><i class="fa fa-eye"
+                                style="color: rgb(0, 0, 0);"></i></button>&nbsp;
+                        <a href="{{route('admin.edit_order',$order->id)}}" title="Edit Order"
+                            class="btn btn-sm btn-primary"><i class="fa fa-edit"
+                                style="color: rgb(255, 255, 255);"></i></a>&nbsp;
+                                 <a href="{{route('admin.accept_order',$order->id)}}" title="Accept Order"
                             class="btn btn-sm btn-success"><i class="fa fa-check"
                                 style="color: rgb(255, 255, 255);"></i></a>&nbsp;
-                        @endif
-                        @if($order->status != "rejected")
-                        <a href="{{route('admin.reject_order',$order->id)}}" title="Reject Order"
+                                 <a href="{{route('admin.reject_order',$order->id)}}" title="Reject Order"
                             class="btn btn-sm btn-danger"><i class="fa fa-times"
                                 style="color: rgb(255, 255, 255);"></i></a>
+                      
+                            
                         @endif
                     </td>
 
