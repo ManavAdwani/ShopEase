@@ -37,11 +37,15 @@
                                 <div class="row align-items-center">
                                     <div class="col-md-2">
                                         @if(!empty($cartProduct->images))
-                                        <img src="{{$cartProduct->images}}" class="img-fluid"
-                                        alt="Generic placeholder image">
+                                        @php
+                                        $images = explode(',', $cartProduct->images);
+                                        $firstImage = $images[0];
+                                        @endphp
+                                        <img src="{{ $firstImage }}" class="img-fluid" alt="Product Image">
+
                                         @else
-                                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAMFBMVEXh6vH////5+vrl7fPv8/f0+fzt9Pbf6vD+/f/j6/Lf6vL///3f6fLr8fbv8/by9vm0HxD7AAACbUlEQVR4nO3c65abIBRAYVHTDALx/d+2VBuDII6zLHro2t/fmEn2HETn2jQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADkG29irNHa4I9G9+qu83B2BTauu01JIIYUUUkghhbcX/ipFTGH3LKOTUmi6Qq/QGQrLovA8Ckuj8LzqC/98A2ZX5YXd2Lajf6beOaTmwm5+tnnsBNZc+NTt/OaNanWT/U5hzYWjWjzyh1VSqK1ONpTPW/fyz66kcHCqixJtHwSqPvvUKgq1D/Rjik61MZzhWPd5aJ3fTfwR6yn+P4XzBFU8RevCwvzPJCoo9IFmepdmPUUdFuqaZzgt0fcUw8T+88Ar/wrSC/UywemgcKE+7Tg/ZNRY8V2bDScYT9G6r+mdu+fOK8guXE8wmaK/Vet6980PPmUXDvEEVXLRCL942lwGkguny0RSmF76//ILuh/SE1JyYXIObk/xzfn17NJH5BZ+LvSHpmjno10yRbmFySYTDHFjivONnZ9iHC+3MLNE31NcJy7zNsn9m9DC9DIRTXG9UD977jTF1UIVWpjbZDJTDM/YeLsRWfjdBKMprj8d8RRFFm5d6Dca31OM99z1diOwMHehT01TTBe0WV00BBYem+AyRbdxcDhFgYX6YN80RZu5LTCSZ9gcLzSqz+xIZvloAgt/MsN8u+QZUkghhRRSSCGFFFJIIYWXFKqv85Towr3fcDpKSy78xygsjcLzKCyNwvPEFCpthxKsVlIKXVeGE1NYHoUUUkghhRRSeFfh2D6u0o53BOpmuOz/RA17f8MHAAAAAAAAAAAAAAAAAAAAAAAAAAAAALjcb3yLQG5tF3tgAAAAAElFTkSuQmCC" class="img-fluid"
-                                            alt="Generic placeholder image">
+                                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAMFBMVEXh6vH////5+vrl7fPv8/f0+fzt9Pbf6vD+/f/j6/Lf6vL///3f6fLr8fbv8/by9vm0HxD7AAACbUlEQVR4nO3c65abIBRAYVHTDALx/d+2VBuDII6zLHro2t/fmEn2HETn2jQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADkG29irNHa4I9G9+qu83B2BTauu01JIIYUUUkghhbcX/ipFTGH3LKOTUmi6Qq/QGQrLovA8Ckuj8LzqC/98A2ZX5YXd2Lajf6beOaTmwm5+tnnsBNZc+NTt/OaNanWT/U5hzYWjWjzyh1VSqK1ONpTPW/fyz66kcHCqixJtHwSqPvvUKgq1D/Rjik61MZzhWPd5aJ3fTfwR6yn+P4XzBFU8RevCwvzPJCoo9IFmepdmPUUdFuqaZzgt0fcUw8T+88Ar/wrSC/UywemgcKE+7Tg/ZNRY8V2bDScYT9G6r+mdu+fOK8guXE8wmaK/Vet6980PPmUXDvEEVXLRCL942lwGkguny0RSmF76//ILuh/SE1JyYXIObk/xzfn17NJH5BZ+LvSHpmjno10yRbmFySYTDHFjivONnZ9iHC+3MLNE31NcJy7zNsn9m9DC9DIRTXG9UD977jTF1UIVWpjbZDJTDM/YeLsRWfjdBKMprj8d8RRFFm5d6Dca31OM99z1diOwMHehT01TTBe0WV00BBYem+AyRbdxcDhFgYX6YN80RZu5LTCSZ9gcLzSqz+xIZvloAgt/MsN8u+QZUkghhRRSSCGFFFJIIYWXFKqv85Towr3fcDpKSy78xygsjcLzKCyNwvPEFCpthxKsVlIKXVeGE1NYHoUUUkghhRRSeFfh2D6u0o53BOpmuOz/RA17f8MHAAAAAAAAAAAAAAAAAAAAAAAAAAAAALjcb3yLQG5tF3tgAAAAAElFTkSuQmCC"
+                                            class="img-fluid" alt="Generic placeholder image">
 
                                         @endif
                                     </div>
@@ -65,7 +69,10 @@
                                     <div class="col-md-2 d-flex justify-content-center">
                                         <div>
                                             <p class="small text-muted">Quantity</p>
-                                            <input type="text" class="form-control" name="" onchange="changeCartValue({{$cartProduct->id}})" value="{{$cartProduct->quantity}}" id="cartQuan{{$cartProduct->id}}" style="width: 60px">
+                                            <input type="text" class="form-control" name=""
+                                                onchange="changeCartValue({{$cartProduct->id}})"
+                                                value="{{$cartProduct->quantity}}" id="cartQuan{{$cartProduct->id}}"
+                                                style="width: 60px">
                                             {{-- <p class="lead fw-normal"></p> --}}
                                         </div>
                                     </div>
@@ -106,10 +113,11 @@
                         </div>
 
                         <div class="d-flex justify-content-end">
-                            <a href="{{route('users.products')}}" type="button" data-mdb-button-init data-mdb-ripple-init
-                                class="btn btn-sm btn-danger btn-lg me-2">Back to products</a>
+                            <a href="{{route('users.products')}}" type="button" data-mdb-button-init
+                                data-mdb-ripple-init class="btn btn-sm btn-danger btn-lg me-2">Back to products</a>
                             <a href="{{route('users.address')}}" type="button" data-mdb-button-init data-mdb-ripple-init
-                                class="btn btn-sm btn-primary btn-lg" @if ($cartProducts->isEmpty()) style="display:none;" @endif>Order now</a>
+                                class="btn btn-sm btn-primary btn-lg" @if ($cartProducts->isEmpty())
+                                style="display:none;" @endif>Order now</a>
                         </div>
 
                     </div>

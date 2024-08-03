@@ -152,9 +152,16 @@
                                                     $productDetails = DB::table('products')->where('id',
                                                     $cartDetails->product_id)->select()->first();
                                                     @endphp
-                                                    @if ($productDetails)
-                                                    <img src="{{ asset($productDetails->images) }}" class="img-fluid"
-                                                        alt="Generic placeholder image">
+                                                    @if (!empty($productDetails->images))
+                                                        @php
+                                                        $images = explode(',', $productDetails->images);
+                                                        $firstImage = $images[0];
+                                                        @endphp
+                                                        <img src="{{ $firstImage }}" class="img-fluid" alt="Product Image">
+                                                    @else
+                                                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAMFBMVEXh6vH////5+vrl7fPv8/f0+fzt9Pbf6vD+/f/j6/Lf6vL///3f6fLr8fbv8/by9vm0HxD7AAACbUlEQVR4nO3c65abIBRAYVHTDALx/d+2VBuDII6zLHro2t/fmEn2HETn2jQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADkG29irNHa4I9G9+qu83B2BTauu01JIIYUUUkghhbcX/ipFTGH3LKOTUmi6Qq/QGQrLovA8Ckuj8LzqC/98A2ZX5YXd2Lajf6beOaTmwm5+tnnsBNZc+NTt/OaNanWT/U5hzYWjWjzyh1VSqK1ONpTPW/fyz66kcHCqixJtHwSqPvvUKgq1D/Rjik61MZzhWPd5aJ3fTfwR6yn+P4XzBFU8RevCwvzPJCoo9IFmepdmPUUdFuqaZzgt0fcUw8T+88Ar/wrSC/UywemgcKE+7Tg/ZNRY8V2bDScYT9G6r+mdu+fOK8guXE8wmaK/Vet6980PPmUXDvEEVXLRCL942lwGkguny0RSmF76//ILuh/SE1JyYXIObk/xzfn17NJH5BZ+LvSHpmjno10yRbmFySYTDHFjivONnZ9iHC+3MLNE31NcJy7zNsn9m9DC9DIRTXG9UD977jTF1UIVWpjbZDJTDM/YeLsRWfjdBKMprj8d8RRFFm5d6Dca31OM99z1diOwMHehT01TTBe0WV00BBYem+AyRbdxcDhFgYX6YN80RZu5LTCSZ9gcLzSqz+xIZvloAgt/MsN8u+QZUkghhRRSSCGFFFJIIYWXFKqv85Towr3fcDpKSy78xygsjcLzKCyNwvPEFCpthxKsVlIKXVeGE1NYHoUUUkghhRRSeFfh2D6u0o53BOpmuOz/RA17f8MHAAAAAAAAAAAAAAAAAAAAAAAAAAAAALjcb3yLQG5tF3tgAAAAAElFTkSuQmCC"
+                                                        class="img-fluid" alt="Generic placeholder image">
+
                                                     @endif
                                                 </div>
                                                 <div class="col-md-2 d-flex justify-content-center">
@@ -181,7 +188,8 @@
                                                         <input type="text" class="form-control" name=""
                                                             onchange="changeCartValue({{ $cartDetails->id }})"
                                                             value="{{ $cartDetails->updated_quantity ?? $cartDetails->quantity }}"
-                                                            id="cartQuan{{ $cartDetails->id }}" style="width: 60px" disabled>
+                                                            id="cartQuan{{ $cartDetails->id }}" style="width: 60px"
+                                                            disabled>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2 d-flex justify-content-center">
@@ -219,7 +227,7 @@
                                                         class="lead fw-normal">₹{{number_format($orderTotal)}}</span>
                                                 </p>
                                             </div>
-                            
+
                                         </div>
                                     </div>
                                 </div>
