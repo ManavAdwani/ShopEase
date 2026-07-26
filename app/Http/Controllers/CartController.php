@@ -110,7 +110,7 @@ class CartController extends Controller
         }
         // dd("HI");
         $storeOrder = Order::create($orderInput);
-        Mail::to('admin@example.com')->send(new OrderPlaced($storeOrder));
+        // Mail::to('admin@example.com')->send(new OrderPlaced($storeOrder));
 
         
         if (!empty($address->id)) {

@@ -7,6 +7,7 @@ use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserBannerController;
 use App\Models\Product;
+// TESTING
 
 Route::get('/', [UserController::class, 'login_page'])->name('users.login_page');
 
