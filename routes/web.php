@@ -9,7 +9,7 @@ use App\Http\Controllers\UserBannerController;
 use App\Models\Product;
 // TESTING
 // Testing 2
-
+// Testing 3
 Route::get('/', [UserController::class, 'login_page'])->name('users.login_page');
 
 Route::post('/login', [UserController::class, 'login'])->name('users.login');
